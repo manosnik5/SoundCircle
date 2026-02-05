@@ -75,3 +75,52 @@ export const deleteSong = async (req, res, next) => {
         next(error);
     }
 }
+
+export const createAlbum = async (req, res, next) => {
+    try {
+        const { title, artist, releaseYear } = req.body;
+        const imageFile = req.files;
+
+        const imageUrl = await uploadToCloudinary(imageFile);
+
+        const album = new Album({
+            title,
+            artist,
+            releaseYear,
+            imageUrl
+        })
+
+        await album.save();
+
+        res.status(201).json(album);
+
+    }catch(error){
+        console.error("Error creating album:", error);
+        next(error);
+    }
+}
+
+export const deleteAlbum = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        await Song.deleteMany({ albumId: id });
+
+        const album = await Album.findById(id);
+
+        if (!album) {
+            return res.status(404).json({ message: "Album not found" });
+        }
+
+        await Album.findByIdAndDelete(id);
+
+        res.status(200).json({ message: "Album and associated songs deleted successfully" });
+    } catch(error){
+        console.error("Error deleting album:", error);
+        next(error);
+    }
+}
+
+export const checkAdmin = (req, res, next) => {
+    res.status(200).json({ admin: true });
+}
