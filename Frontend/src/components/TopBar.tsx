@@ -1,4 +1,4 @@
-import { SignedOut } from '@clerk/clerk-react';
+import { SignedOut, SignedIn, SignOutButton } from '@clerk/clerk-react';
 import { LayoutDashboardIcon } from 'lucide-react';
 import SignInOAuthButton from './SignInOAuthButton';
 import { Link } from 'react-router-dom';
@@ -18,9 +18,15 @@ const TopBar = () => {
                         Admin DashBoard
                     </Link>
                 ) : (
-                    <SignedOut>
-                        <SignInOAuthButton/>
-                    </SignedOut>
+                    <>
+                        <SignedIn>
+                            <SignOutButton/>
+                        </SignedIn>
+                        <SignedOut>
+                            <SignInOAuthButton/>
+                        </SignedOut>
+                    </>
+                  
                 )
             }
 
