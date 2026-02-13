@@ -1,4 +1,6 @@
 import { useSignIn } from "@clerk/clerk-react"
+import { Button } from "./ui/button";
+
 
 const SignInOAuthButton = () => {
     const {signIn, isLoaded} = useSignIn();
@@ -16,7 +18,7 @@ const SignInOAuthButton = () => {
     };
 
     return (
-        <button onClick={signInWithGoogle} className="px-2 py-4 bg-black text-white">Continue with Google</button>
+        <Button onClick={signInWithGoogle} className="px-2 py-4 bg-black text-white">Continue with Google</Button>
     )
 }
 
