@@ -6,6 +6,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable"
+import AudioPlayer from "./components/AudioPlayer"
 
 
 const MainLayout = () => {
@@ -13,6 +14,7 @@ const MainLayout = () => {
   return (
     <div className="h-screen bg-[#121212] text-white flex flex-col">
       <ResizablePanelGroup orientation="horizontal" className="flex-1 flex h-full p-2 ">
+        <AudioPlayer/>
         <ResizablePanel defaultSize="20%" minSize={isMobile ? "0%" : "10%"} maxSize="30%">
           <LeftSidebar />
         </ResizablePanel>
