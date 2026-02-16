@@ -55,7 +55,7 @@ export const getMadeForYouSongs = async (req, res, next) => {
             }
         ])
 
-        res.status(200).json(featuredSongs);
+        res.status(200).json(madeForYouSongs);
     }catch (error) {
         next(error);
     }   
@@ -78,7 +78,7 @@ export const getTrendingSongs = async (req, res, next) => {
             }
         ])
 
-        res.status(200).json(featuredSongs);
+        res.status(200).json(trendingSongs);
     }catch (error) {
         next(error);
     } 
