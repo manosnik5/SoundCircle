@@ -1,6 +1,7 @@
 import {Song} from "../models/song.model.js";
 import {Album} from "../models/album.model.js";
 import cloudinary from "../lib/cloudinary.js";
+import { clerkClient } from "@clerk/express";
 
 const uploadToCloudinary = async (file) => {
     try{
@@ -121,6 +122,15 @@ export const deleteAlbum = async (req, res, next) => {
     }
 }
 
-export const checkAdmin = (req, res, next) => {
-    res.status(200).json({ admin: true });
-}
+export const checkAdmin = async (req, res, next) => {
+    try {
+        const currentUser = await clerkClient.users.getUser(req.auth.userId);
+        const adminEmails = process.env.ADMIN_EMAIL?.split(',') || [];
+        const isAdmin = adminEmails.includes(currentUser.primaryEmailAddress?.emailAddress);
+        
+        res.status(200).json({ admin: isAdmin });
+    } catch (error) {
+        console.error("Error in checkAdmin:", error);
+        res.status(500).json({ admin: false, message: "Error checking admin status" });
+    }
+};
