@@ -16,7 +16,7 @@ const seedDatabase = async () => {
 			{
 				title: "City Rain",
 				artist: "Urban Echo",
-				imageUrl: "/cover-images/7.jpg",
+				imageUrl: "/song-covers/7.jpg",
 				audioUrl: "/songs/7.mp3",
 				plays: Math.floor(Math.random() * 5000),
 				duration: 39, // 0:39
@@ -24,7 +24,7 @@ const seedDatabase = async () => {
 			{
 				title: "Neon Lights",
 				artist: "Night Runners",
-				imageUrl: "/cover-images/5.jpg",
+				imageUrl: "/song-covers/5.jpg",
 				audioUrl: "/songs/5.mp3",
 				plays: Math.floor(Math.random() * 5000),
 				duration: 36, // 0:36
@@ -32,7 +32,7 @@ const seedDatabase = async () => {
 			{
 				title: "Urban Jungle",
 				artist: "City Lights",
-				imageUrl: "/cover-images/15.jpg",
+				imageUrl: "/song-covers/15.jpg",
 				audioUrl: "/songs/15.mp3",
 				plays: Math.floor(Math.random() * 5000),
 				duration: 36, // 0:36
@@ -40,7 +40,7 @@ const seedDatabase = async () => {
 			{
 				title: "Neon Dreams",
 				artist: "Cyber Pulse",
-				imageUrl: "/cover-images/13.jpg",
+				imageUrl: "/song-covers/13.jpg",
 				audioUrl: "/songs/13.mp3",
 				plays: Math.floor(Math.random() * 5000),
 				duration: 39, // 0:39
@@ -48,7 +48,7 @@ const seedDatabase = async () => {
 			{
 				title: "Summer Daze",
 				artist: "Coastal Kids",
-				imageUrl: "/cover-images/4.jpg",
+				imageUrl: "/song-covers/4.jpg",
 				audioUrl: "/songs/4.mp3",
 				plays: Math.floor(Math.random() * 5000),
 				duration: 24, // 0:24
@@ -56,7 +56,7 @@ const seedDatabase = async () => {
 			{
 				title: "Ocean Waves",
 				artist: "Coastal Drift",
-				imageUrl: "/cover-images/9.jpg",
+				imageUrl: "/song-covers/9.jpg",
 				audioUrl: "/songs/9.mp3",
 				plays: Math.floor(Math.random() * 5000),
 				duration: 28, // 0:28
@@ -64,7 +64,7 @@ const seedDatabase = async () => {
 			{
 				title: "Crystal Rain",
 				artist: "Echo Valley",
-				imageUrl: "/cover-images/16.jpg",
+				imageUrl: "/song-covers/16.jpg",
 				audioUrl: "/songs/16.mp3",
 				plays: Math.floor(Math.random() * 5000),
 				duration: 39, // 0:39
@@ -72,7 +72,7 @@ const seedDatabase = async () => {
 			{
 				title: "Starlight",
 				artist: "Luna Bay",
-				imageUrl: "/cover-images/10.jpg",
+				imageUrl: "/song-covers/10.jpg",
 				audioUrl: "/songs/10.mp3",
 				plays: Math.floor(Math.random() * 5000),
 				duration: 30, // 0:30
@@ -80,7 +80,7 @@ const seedDatabase = async () => {
 			{
 				title: "Stay With Me",
 				artist: "Sarah Mitchell",
-				imageUrl: "/cover-images/1.jpg",
+				imageUrl: "/song-covers/1.jpg",
 				audioUrl: "/songs/1.mp3",
 				plays: Math.floor(Math.random() * 5000),
 				duration: 46, // 0:46
@@ -88,7 +88,7 @@ const seedDatabase = async () => {
 			{
 				title: "Midnight Drive",
 				artist: "The Wanderers",
-				imageUrl: "/cover-images/2.jpg",
+				imageUrl: "/song-covers/2.jpg",
 				audioUrl: "/songs/2.mp3",
 				plays: Math.floor(Math.random() * 5000),
 				duration: 41, // 0:41
@@ -96,7 +96,7 @@ const seedDatabase = async () => {
 			{
 				title: "Moonlight Dance",
 				artist: "Silver Shadows",
-				imageUrl: "/cover-images/14.jpg",
+				imageUrl: "/song-covers/14.jpg",
 				audioUrl: "/songs/14.mp3",
 				plays: Math.floor(Math.random() * 5000),
 				duration: 27, // 0:27
@@ -104,7 +104,7 @@ const seedDatabase = async () => {
 			{
 				title: "Lost in Tokyo",
 				artist: "Electric Dreams",
-				imageUrl: "/cover-images/3.jpg",
+				imageUrl: "/song-covers/3.jpg",
 				audioUrl: "/songs/3.mp3",
 				plays: Math.floor(Math.random() * 5000),
 				duration: 24, // 0:24
@@ -112,7 +112,7 @@ const seedDatabase = async () => {
 			{
 				title: "Neon Tokyo",
 				artist: "Future Pulse",
-				imageUrl: "/cover-images/17.jpg",
+				imageUrl: "/song-covers/17.jpg",
 				audioUrl: "/songs/17.mp3",
 				plays: Math.floor(Math.random() * 5000),
 				duration: 39, // 0:39
@@ -120,7 +120,7 @@ const seedDatabase = async () => {
 			{
 				title: "Purple Sunset",
 				artist: "Dream Valley",
-				imageUrl: "/cover-images/12.jpg",
+				imageUrl: "/song-covers/12.jpg",
 				audioUrl: "/songs/12.mp3",
 				plays: Math.floor(Math.random() * 5000),
 				duration: 17, // 0:17

@@ -8,7 +8,7 @@ const songs = [
 	{
 		title: "Stay With Me",
 		artist: "Sarah Mitchell",
-		imageUrl: "/cover-images/1.jpg",
+		imageUrl: "/song-covers/1.jpg",
 		audioUrl: "/songs/1.mp3",
 		duration: 46,
 	},
