@@ -2,7 +2,8 @@ import { useParams } from "react-router-dom"
 import { useAlbum } from "@/hooks/useMusic";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { Clock, Play } from "lucide-react";
+import { Clock, Pause, Play } from "lucide-react";
+import { usePlayer } from "@/contexts/MusicPlayerContext";
 
 export const formatDuration = (seconds: number) => {
 	const minutes = Math.floor(seconds / 60);
@@ -13,6 +14,20 @@ export const formatDuration = (seconds: number) => {
 const AlbumPage = () => {
   const {albumId} = useParams();
   const { data: album, isLoading: albumLoading } = useAlbum(albumId || "");
+  const { currentSong, isPlaying, playAlbum, togglePlay} = usePlayer();
+
+  const handlePlayAlbum = () => {
+    if (!album) return
+    const currentAlbumPlaying = album?.songs.some(song => song._id === currentSong?._id)
+    if(currentAlbumPlaying) togglePlay();
+    else {
+      playAlbum(album?.songs, 0)
+    }
+  }
+  const handlePlayAlbumSong = (index: number) => {
+    if (!album) return
+    playAlbum(album?.songs, index)
+  }
   
   if (!albumId) {
     return <div>Album not found</div>;
@@ -26,6 +41,11 @@ const AlbumPage = () => {
     <div className="h-full">
       <ScrollArea className="h-full rounded-md">
         <div className="relative min-h-full">
+          <div
+						className='absolute inset-0 bg-linear-to-b from-[#5038a0]/80 via-zinc-900/80
+					 to-zinc-900 pointer-events-none'
+						aria-hidden='true'
+					/>
           <div className="relative z-10">
             <div className="flex p-6 gap-6 pb-8">
               <img src={album?.imageUrl} alt={album?.title} className="w-60 h-60 rounded shadow-xl"/>
@@ -40,8 +60,13 @@ const AlbumPage = () => {
               </div>
             </div>
             <div className="px-6 pb-4 flex items-center gap-6">
-              <Button size='icon' className="w-14 h-14 rounded-full bg-blue-500 hover:bg-blue-400 cursor-pointer hover:scale-105 transition-all">
-                <Play className="text-black h-7 w-7"></Play>
+              <Button size='icon' className="w-14 h-14 rounded-full bg-blue-500 hover:bg-blue-400 cursor-pointer hover:scale-105 transition-all" onClick={handlePlayAlbum}>
+                {isPlaying && album?.songs.some(song => song._id === currentSong?._id) ? (
+                  <Pause className="text-black h-7 w-7"/>
+                ) : (
+                    <Play className="text-black h-7 w-7"></Play>
+                )}
+              
               </Button>
             </div>
 
@@ -56,11 +81,19 @@ const AlbumPage = () => {
               </div>
               <div className="px-6">
                 <div className="space-y-2 py-4">
-                  {album?.songs.map((song, index) => (
-                    <div className="grid grid-cols-[16px_4fr_2fr_1fr] gap-4 px-4 py-2 text-sm text-zinc-400 rounded-md group border-b border-white/5 cursor-pointer hover:bg-white/5" key={song._id}>
+                  {album?.songs.map((song, index) => { 
+                    const isCurrentSong = currentSong?._id === song._id
+                    return (
+                    <div className="grid grid-cols-[16px_4fr_2fr_1fr] gap-4 px-4 py-2 text-sm text-zinc-400 rounded-md group border-b border-white/5 cursor-pointer hover:bg-white/5" key={song._id} onClick={() => handlePlayAlbumSong(index)}>
                       <div className="flex items-center justify-center">
-                        <span className="group-hover:hidden">{index + 1}</span>
-                        <Play className="hidden h-4 w-4 group-hover:block"/>
+                        {isCurrentSong && isPlaying ? (
+                          <div className="size-4 text-green-500">♫</div>
+                        ) : (
+                          <span className="group-hover:hidden">{index + 1}</span>
+                        )}
+                        {!isCurrentSong && (
+														<Play className='h-4 w-4 hidden group-hover:block' />
+													)}
                       </div>
                       <div className="flex items-center gap-3">
                         <img src={song.imageUrl} alt={song.title} className="size-10"/>
@@ -72,7 +105,7 @@ const AlbumPage = () => {
                     <div className='flex items-center'>{song.createdAt.split("T")[0]}</div>
                     <div className='flex items-center'>{formatDuration(song.duration)}</div>
                     </div>
-                  ))}
+                  )})}
                 </div>
               </div>
             </div>
