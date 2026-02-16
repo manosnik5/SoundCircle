@@ -4,9 +4,9 @@ import { protectRoute, requireAdmin } from "../middleware/auth.middleware.js";
 
 const router = Router();
 
-router.use(protectRoute, requireAdmin);
+router.get("/check", protectRoute, checkAdmin);
 
-router.get("/check", checkAdmin);
+router.use(protectRoute, requireAdmin);
 
 router.post("/songs", createSong);
 router.delete("/songs/:id", deleteSong);
