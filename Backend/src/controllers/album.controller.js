@@ -22,3 +22,26 @@ export const getAlbumById = async (req, res, next) => {
         next(error);
     }
 }
+
+export const getSearchAlbums = async (req, res, next) => {
+    try {
+        const { q } = req.query;
+        
+        if (!q || q.trim() === '') {
+            return res.status(200).json([]);
+        }
+
+        const albums = await Album.find({
+            $or: [
+                { title: { $regex: q, $options: 'i' } },
+                { artist: { $regex: q, $options: 'i' } }
+            ]
+        })
+        .limit(10)
+        .select('_id title artist imageUrl releaseYear');
+
+        res.status(200).json(albums);
+    } catch (error) {
+        next(error);
+    }
+};
