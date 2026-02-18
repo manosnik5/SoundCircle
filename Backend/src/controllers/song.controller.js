@@ -11,8 +11,28 @@ export const getAllSongs = async (req, res, next) => {
     
 }
 
-export const getSongById = async (req, res, next) => {
+export const getSearchSongs = async (req, res, next) => {
+    try{
+        const { q } = req.query;
 
+        if (!q || q.trim() === '') {
+            return res.status(200).json([]);
+        }
+
+        const songs = await Song.find({
+            $or: [
+                { title: { $regex: q, $options: 'i' } },
+                { artist: { $regex: q, $options: 'i' } }
+            ]
+        })
+        .limit(10)
+        .select('_id title artist imageUrl audioUrl duration');
+
+        res.status(200).json(songs);
+
+    }catch (error) {
+        next(error);
+    }
 }
 
 export const getFeaturedSongs = async (req, res, next) => {
