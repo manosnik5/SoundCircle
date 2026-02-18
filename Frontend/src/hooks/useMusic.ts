@@ -5,12 +5,14 @@ export const musicKeys = {
     all: ["music"] as const,
     songs: () => [...musicKeys.all, "songs"] as const,
     featuredSongs: () => [...musicKeys.all, "featured"] as const,
-  madeForYouSongs: () => [...musicKeys.all, "made-for-you"] as const,
-  trendingSongs: () => [...musicKeys.all, "trending"] as const,
+    madeForYouSongs: () => [...musicKeys.all, "made-for-you"] as const,
+    trendingSongs: () => [...musicKeys.all, "trending"] as const,
     albums: () => [...musicKeys.all, "albums"] as const,
     Album: (id: string) => [...musicKeys.albums(), id] as const,
     users: () => [...musicKeys.all, "users"] as const,
     admin: () => [...musicKeys.all, "admin"] as const,
+    searchSongs: (query: string) => [...musicKeys.all, "search", "songs", query] as const,
+    searchAlbums: (query: string) => [...musicKeys.all, "search", "albums", query] as const,
 }
 
 export const useSongs = () => {
@@ -37,7 +39,6 @@ export const useMadeForYouSongs = () => {
   });
 };
 
-// Trending Songs Hook
 export const useTrendingSongs = () => {
   return useQuery({
     queryKey: musicKeys.trendingSongs(),
@@ -77,4 +78,22 @@ export const useAdminCheck = () => {
     select: (data) => data.admin, 
   });
 }
+
+export const useSearchSongs = (query: string) => {
+  return useQuery({
+    queryKey: musicKeys.searchSongs(query),
+    queryFn: () => musicApi.searchSongs(query),
+    enabled: query.length > 0,
+    staleTime: 1000 * 60 * 5,
+  });
+};
+
+export const useSearchAlbums = (query: string) => {
+  return useQuery({
+    queryKey: musicKeys.searchAlbums(query),
+    queryFn: () => musicApi.searchAlbums(query),
+    enabled: query.length > 0,
+    staleTime: 1000 * 60 * 5,
+  });
+};
 
