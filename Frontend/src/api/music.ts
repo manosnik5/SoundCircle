@@ -1,5 +1,5 @@
 import { axiosInstance } from "@/lib/axios";
-import type { Album, Song, User } from "@/types";
+import type { Album, Song, Stats, User } from "@/types";
 
 export const musicApi = {
     getSongs: async (): Promise<Song[]> => {
@@ -26,6 +26,13 @@ export const musicApi = {
         const response = await axiosInstance.get(`/albums/${id}`);
         return response.data;
     },
+    deleteSong: async (id: string): Promise<void> => {
+        const response = await axiosInstance.delete(`/admin/songs/${id}`);
+        return response.data;
+    },
+    deleteAlbum: async (id: string): Promise<void> => {
+    await axiosInstance.delete(`/admin/albums/${id}`);
+  },
     getUsers: async (): Promise<User[]> => {
         const response = await axiosInstance.get("/users");
         return response.data;
@@ -40,6 +47,10 @@ export const musicApi = {
     },
     searchAlbums: async (query: string): Promise<Album[]> => {
         const response = await axiosInstance.get(`/albums/search?q=${encodeURIComponent(query)}`);
+        return response.data;
+    },
+    getStats: async (): Promise<Stats> => {
+        const response = await axiosInstance.get("/stats");
         return response.data;
     },
 }
