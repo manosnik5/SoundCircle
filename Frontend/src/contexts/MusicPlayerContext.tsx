@@ -23,12 +23,12 @@ export const MusicPlayerProvider = ({children}: {children: ReactNode}) => {
     const [currentIndex, setCurrentIndex] = useState(-1);
 
     const initializeQueue = useCallback((songs: Song[]) => {
-        setQueue(songs);
-        if(currentIndex === -1) {
-            setCurrentSongState(currentSong || songs[0])
-            setCurrentIndex(0);
-        }
-    }, [currentSong, currentIndex])
+    setQueue(songs);
+    if (currentIndex === -1) {
+        setCurrentSongState((prev) => prev ?? songs[0]);
+        setCurrentIndex(0);
+    }
+}, [currentIndex])
 
     const playAlbum = useCallback((songs: Song[], startIndex = 0) => {
         if (songs.length === 0) return;
