@@ -19,10 +19,10 @@ const UsersList = ({ users, usersLoading, selectedUserId, onSelectUser }: UsersL
     <div className='border-r border-zinc-800'>
       <div className='flex flex-col h-full'>
         <div className="p-4 self-center">
-          <span className="font-semibold text-xl">Friends</span>
+          <span className="font-semibold text-sm lg:text-xl">Friends</span>
         </div>
         
-        <ScrollArea className="flex-1">
+        <ScrollArea className="flex-1 ">
           <div className="p-2 space-y-2">
             {usersLoading ? (
               <UsersListSkeleton />
@@ -50,7 +50,7 @@ const UsersList = ({ users, usersLoading, selectedUserId, onSelectUser }: UsersL
                       )}
                     </div>
 
-                    <div className="hidden lg:block text-left min-w-0">
+                    <div className="hidden md:block text-left min-w-0">
                       <p className="font-medium truncate">{user.fullName}</p>
                       {activity && activity !== "Idle" ? (
                         <p className="text-xs text-emerald-500 flex items-center gap-1 truncate">
