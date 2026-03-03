@@ -4,6 +4,13 @@
 
 @custom-variant dark (&:is(.dark *));
 
+.break-anywhere {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
