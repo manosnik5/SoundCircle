@@ -19,7 +19,7 @@ const SongsTable = () => {
     if (error) {
         return (
             <div className="flex items-center justify-between p-8">
-                <div className="text-red-400">{error}</div>
+                <div className="text-red-400">{error.message}</div>
             </div>
         )
     }
@@ -35,7 +35,7 @@ const SongsTable = () => {
             <TableHeader>
                 </TableHeader> 
                 <TableRow>
-                    <TableHead className='w-[50px]'></TableHead>
+                    <TableHead className='w-12.5'></TableHead>
 					<TableHead>Title</TableHead>
 					<TableHead>Artist</TableHead>
 					<TableHead>Release Date</TableHead>
