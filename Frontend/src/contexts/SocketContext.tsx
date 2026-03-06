@@ -17,7 +17,7 @@ interface SocketContextType {
 
 const SocketContext = createContext<SocketContextType | undefined>(undefined);
 
-const baseURL = "http://localhost:5000";
+const baseURL = import.meta.env.MODE === "development" ? "http://localhost:5000/api" : "/";
 
 export const SocketProvider = ({children}: { children: ReactNode }) => {
     const { userId } = useAuth();
