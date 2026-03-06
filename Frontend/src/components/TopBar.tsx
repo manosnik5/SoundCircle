@@ -57,7 +57,7 @@ const TopBar = () => {
     <div className='flex items-center justify-between p-4 sticky top-0 bg-[#121212] backdrop-blur-md z-10 gap-2'>
       
       <div className='flex gap-2 items-center shrink-0'>
-        logo
+        <img src='/soundCircleLogo.png' className='size-15' alt='SoundCircle logo' />
       </div>
 
       <div className='flex-1 flex justify-center px-2 min-w-0'>
@@ -147,7 +147,6 @@ const TopBar = () => {
           )}
         </div>
       </div>
-
 
       <div className='flex gap-2 items-center shrink-0'>
         {isAdmin ? (
