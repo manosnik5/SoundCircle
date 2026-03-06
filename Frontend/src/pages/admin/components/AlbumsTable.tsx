@@ -19,7 +19,7 @@ const AlbumsTable = () => {
     if (error) {
         return (
             <div className="flex items-center justify-between p-8">
-                <div className="text-red-400">{error}</div>
+                <div className="text-red-400">{error.message}</div>
             </div>
         )
     }
@@ -68,7 +68,7 @@ const AlbumsTable = () => {
 									variant='ghost'
 									size='sm'
 									onClick={() => handleDelete(album._id)}
-									className='text-red-400 hover:text-red-300 hover:bg-red-400/10'
+									className='text-red-400 hover:text-red-300 hover:bg-red-400/10 cursor-pointer'
 								>
 									<Trash2 className='h-4 w-4' />
 								</Button>
