@@ -148,7 +148,7 @@ const TopBar = () => {
         </div>
       </div>
 
-      {/* Right side — fixed width, won't be pushed off screen */}
+
       <div className='flex gap-2 items-center shrink-0'>
         {isAdmin ? (
           <div className='flex items-center gap-2'>
@@ -159,7 +159,7 @@ const TopBar = () => {
               <LayoutDashboardIcon className='size-4 mr-1.5' />
               <span>Admin</span>
             </Link>
-            {/* Icon-only on mobile */}
+        
             <Link
               to="/admin"
               className={cn(buttonVariants({ variant: "default", size: "icon" }), "sm:hidden")}
