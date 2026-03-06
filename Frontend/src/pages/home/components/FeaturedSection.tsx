@@ -1,4 +1,3 @@
-import { useFeaturedSongs } from "@/hooks/useMusic";
 import type { Song } from "@/types";
 import FeaturedGridSkeleton from "@/components/skeletons/FeaturedGridSkeleton";
 import PlayButton from "./PlayButton";
