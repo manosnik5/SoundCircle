@@ -45,7 +45,7 @@ const PlayBackControls = () => {
     }
 
   return (
-    <div className="h-20 sm:h-22 bg-zinc-900 border-t border-zinc-800 px-4">
+    <div className="h-20 sm:h-22 bg-[#121212] px-4 dark">
         <div className="flex justify-between items-center h-full max-w-450 mx-auto">
             <div className="hidden sm:flex items-center gap-4 min-w-45 w-[30%]">
                 {currentSong && (
@@ -66,14 +66,14 @@ const PlayBackControls = () => {
                 <div className='flex items-center gap-4 sm:gap-6'>
                     <Button
                         size='icon'
-                        variant='default'
+                        variant='ghost'
                         className='hidden sm:inline-flex hover:text-white text-zinc-400 cursor-pointer'
 					>
 					<Shuffle className='h-4 w-4' />
                     </Button>
                     <Button
                         size='icon'
-                        variant='default'
+                        variant='ghost'
                         className='hover:text-white text-zinc-400 cursor-pointer'
                         onClick={playPrevious}
                         disabled={!currentSong}
@@ -91,7 +91,7 @@ const PlayBackControls = () => {
                     </Button>
                     <Button
                         size='icon'
-                        variant='default'
+                        variant='ghost'
                         className='hover:text-white text-zinc-400 cursor-pointer'
                         onClick={playNext}
                         disabled={!currentSong}
@@ -100,7 +100,7 @@ const PlayBackControls = () => {
                     </Button>
                     <Button
                         size='icon'
-                        variant='default'
+                        variant='ghost'
                         className='hidden sm:inline-flex hover:text-white text-zinc-400 cursor-pointer'
                     >
                         <Repeat className='h-4 w-4' />
@@ -119,25 +119,13 @@ const PlayBackControls = () => {
                 </div>
             </div>
             <div className='hidden sm:flex items-center gap-4 min-w-45 w-[30%] justify-end'>
-                	<Button size='icon' variant='default' className='hover:text-white text-zinc-400 cursor-pointer'>
-						<Mic2 className='h-4 w-4' />
-					</Button>
-                    	<Button size='icon' variant='default' className='hover:text-white text-zinc-400 cursor-pointer'>
-						<ListMusic className='h-4 w-4' />
-					</Button>
-					<Button size='icon' variant='default' className='hover:text-white text-zinc-400 cursor-pointer'>
-						<Laptop2 className='h-4 w-4' />
-					</Button>
-                    	<div className='flex items-center gap-2'>
-						<Button size='icon' variant='default' className='hover:text-white text-zinc-400 cursor-pointer'>
-							<Volume1 className='h-4 w-4' />
-						</Button>
+                
 
 						<Slider
 							value={[volume]}
 							max={100}
 							step={1}
-							className='w-24 hover:cursor-grab active:cursor-grabbing'
+							className='w-64 hover:cursor-grab active:cursor-grabbing'
 							onValueChange={(value) => {
 								setVolume(value[0]);
 								if (audioRef.current) {
@@ -145,7 +133,7 @@ const PlayBackControls = () => {
 								}
 							}}
 						/>
-					</div>
+					
             </div>
         </div>
     </div>
