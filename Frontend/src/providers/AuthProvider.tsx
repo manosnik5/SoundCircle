@@ -12,38 +12,35 @@ const updateApiToken = (token: string | null) => {
 }
 
 const AuthProvider = ({children}: {children: React.ReactNode}) => {
-    const {getToken} = useAuth()
+    const { getToken, isLoaded } = useAuth();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const initAuth = async () => {
+        const initAuth = async () => {       
+            if (!isLoaded) return;
             try {
                 const token = await getToken();
                 updateApiToken(token);
-
-            }catch (error) { 
+            } catch (error) { 
                 updateApiToken(null);
                 console.error("Error initializing auth:", error);
-            }finally{
+            } finally {
                 setLoading(false);
             }
         }
 
         initAuth()
-    }, [getToken])
+    }, [getToken, isLoaded])
 
-    if (loading) {
+    if (loading || !isLoaded) {
         return (
-            <div className="h-screen w-full flex items-center justify-center">
-                <Loader className="size-8 text-gray-500 animate-spin"/>
+            <div className="h-screen w-full bg-[#121212] flex items-center justify-center">
+                <Loader className="size-8 text-blue-500 animate-spin"/>
             </div>
         )
     }
-    return (
-        <div>
-            {children}
-        </div>
-    )
+
+    return <>{children}</>
 }
 
 export default AuthProvider
