@@ -8,8 +8,6 @@ export const getStats = async (req, res, next) => {
             Song.countDocuments(),
             Album.countDocuments(),
             User.countDocuments(),
-            
-            // Get unique artists from songs only
             Song.distinct("artist")
         ]);
 
@@ -17,7 +15,7 @@ export const getStats = async (req, res, next) => {
             totalSongs,
             totalAlbums,
             totalUsers,
-            totalArtists: uniqueArtists.length, // distinct returns array
+            totalArtists: uniqueArtists.length, 
         });
         
     } catch (error) {
