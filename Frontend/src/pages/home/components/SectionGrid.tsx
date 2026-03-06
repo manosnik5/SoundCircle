@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import type { Song } from "@/types";
 import SectionGridSkeleton from "@/components/skeletons/SectionGridSkeleton.tsx";
-import { Button } from "@/components/ui/button";
 import PlayButton from "./PlayButton";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
