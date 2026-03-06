@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 const FooterPage = () => {
    return (
-    <div className='flex flex-col w-full mt-24'>
+    <div className='flex flex-col w-full mt-24 dark'>
     <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 bg-[#1a1b1d] border border-l-0 border-r-0 border-zinc-800 py-8'>
         <div className='flex flex-col space-y-1 items-start'>
         <h1 className='font-semibold truncate'>Company</h1>
@@ -28,21 +28,21 @@ const FooterPage = () => {
         <div className='flex gap-3'>
             <Button
                 size='icon'
-                variant='default'
+                variant='ghost'
                 className='hidden sm:inline-flex hover:text-white text-zinc-400 cursor-pointer'
             >
                 <Instagram className='h-8 w-8' />
             </Button>
             <Button
                 size='icon'
-                variant='default'
+                variant='ghost'
                 className='hidden sm:inline-flex hover:text-white text-zinc-400 cursor-pointer'
             >
                 <Facebook className='h-8 w-8' />
             </Button>
             <Button
                 size='icon'
-                variant='default'
+                variant='ghost'
                 className='hidden sm:inline-flex hover:text-white text-zinc-400 cursor-pointer'
             >
                 <Twitter className='h-8 w-8' />
