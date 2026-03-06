@@ -1,4 +1,3 @@
-import { ScrollArea } from "@/components/ui/scroll-area";
 import TopBar from "../../components/TopBar"
 import FeaturedSection from "./components/FeaturedSection";
 import SectionGrid from "./components/SectionGrid";
@@ -9,9 +8,9 @@ import FooterPage from "./components/FooterPage";
 
 
 const HomePage = () => {
-   const { data: featuredSongs, isLoading: featuredLoading} = useFeaturedSongs();
-   const { data: madeForYouSongs, isLoading: madeForYouLoading} = useMadeForYouSongs();
-   const { data: trendingSongs, isLoading: trendingLoading} = useTrendingSongs();
+   const { data: featuredSongs = [], isLoading: featuredLoading } = useFeaturedSongs();
+   const { data: madeForYouSongs = [], isLoading: madeForYouLoading } = useMadeForYouSongs();
+   const { data: trendingSongs = [], isLoading: trendingLoading } = useTrendingSongs();
    const { initializeQueue } = usePlayer();
 
    useEffect(() => {
