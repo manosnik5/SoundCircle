@@ -2,7 +2,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useSocket } from "@/contexts/SocketContext";
 import UsersListSkeleton from "@/components/skeletons/UserListSkeleton";
-import { Music } from "lucide-react";
 import type { User } from "@/types";
 
 interface UsersListProps {
