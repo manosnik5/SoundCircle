@@ -5,24 +5,15 @@ import fs from "fs";
 import { clerkClient } from "@clerk/express";
 
 const uploadToCloudinary = async (file) => {
-  try {
-    const result = await cloudinary.uploader.upload(
-      file.tempFilePath,
-      { resource_type: "auto" }
-    );
-
-    fs.unlinkSync(file.tempFilePath);
-
-    return result.secure_url;
-
-  } catch (error) {
-    if (file?.tempFilePath && fs.existsSync(file.tempFilePath)) {
-      fs.unlinkSync(file.tempFilePath);
-    }
-
-    console.error("Error uploading to Cloudinary:", error);
-    throw new Error("Failed to upload file to Cloudinary");
-  }
+	try {
+		const result = await cloudinary.uploader.upload(file.tempFilePath, {
+			resource_type: "auto",
+		});
+		return result.secure_url;
+	} catch (error) {
+		console.log("Error in uploadToCloudinary", error);
+		throw new Error("Error uploading to cloudinary");
+	}
 };
 
 export const createSong = async (req, res, next) => {
