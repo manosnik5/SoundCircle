@@ -53,10 +53,14 @@ const UsersList = ({ users, usersLoading, selectedUserId, onSelectUser }: UsersL
                     <div className="hidden md:block text-left min-w-0">
                       <p className="font-medium truncate">{user.fullName}</p>
                       {activity && activity !== "Idle" ? (
-                        <p className="text-xs text-emerald-500 flex items-center gap-1 truncate">
-                          <Music className="w-3 h-3" />
-                          {activity}
-                        </p>
+                        <div className='mt-1'>
+												<div className='mt-1 text-xs text-white font-medium truncate'>
+													{activity.replace("Playing ", "").split(" by ")[0]}
+												</div>
+												<div className='text-[11px] text-zinc-400 truncate'>
+													{activity.split(" by ")[1]}
+												</div>
+											</div>
                       ) : (
                         <p className="text-xs text-zinc-400">
                           {isOnline ? "Online" : "Offline"}
