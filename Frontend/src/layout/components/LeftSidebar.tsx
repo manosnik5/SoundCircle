@@ -6,7 +6,7 @@ import { buttonVariants } from '@/components/ui/button';
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useState, useEffect } from 'react';
 import PlaylistSkeleton from '@/components/skeletons/PlaylistSkeleton';
-import { useSongs, useAlbums} from "@/hooks/useMusic";
+import { useAlbums} from "@/hooks/useMusic";
 
 const LeftSidebar = () => {
     const isLoading = false;
@@ -17,7 +17,7 @@ const LeftSidebar = () => {
  
   return (
     <div className='h-full flex flex-col gap-2'>
-        <div className='bg-[#202020] rounded-lg p-4'>
+        <div className='bg-[#121212] rounded-lg p-4'>
             <div className='space-y-2'>
                 <Link to={"/"}
                 className={cn(
@@ -46,7 +46,7 @@ const LeftSidebar = () => {
                 </SignedIn>
             </div>
         </div>
-        <div className='flex-1 bg-[#202020] rounded-lg p-4'>
+        <div className='flex-1 bg-[#121212] rounded-lg p-4'>
             <div className='flex items-center justify-between mb-4'>
                 <div className='flex items-center text-white px-2'>
                     <Library className='size-5 mr-2' />
