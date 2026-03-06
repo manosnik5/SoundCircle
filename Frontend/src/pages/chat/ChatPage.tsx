@@ -18,7 +18,7 @@ const ChatPage = () => {
   return (
     <div className="h-full rounded-lg bg-zinc-900 overflow-hidden">
       <TopBar />
-      <div className="grid lg:grid-cols-[270px_1fr] grid-cols-[180px_1fr] h-[calc(100vh-170px)]">
+      <div className="grid lg:grid-cols-[240px_1fr] md:grid-cols-[200px_1fr] grid-cols-[80px_1fr] h-[calc(100vh-170px)]">
         <UsersList
           users={users}
           usersLoading={usersLoading}
