@@ -5,6 +5,7 @@ import SectionGrid from "./components/SectionGrid";
 import { useMadeForYouSongs, useTrendingSongs, useFeaturedSongs } from "@/hooks/useMusic";
 import { usePlayer } from '@/contexts/MusicPlayerContext';
 import { useEffect } from "react";
+import FooterPage from "./components/FooterPage";
 
 
 const HomePage = () => {
@@ -23,11 +24,11 @@ const HomePage = () => {
 
 
   return (
-    <main className="rounded-md overflow-hidden h-full bg-linear-to-b from bg-zinc-800 to-zinc-900">
+    <main className="rounded-md overflow-hidden h-full bg-[#1a1b1d]">
         <TopBar/>
         <section>
        
-        <ScrollArea className="h-[calc(100vh-180px)]">
+        <div className="h-[calc(100vh-180px)] overflow-y-auto">
           <div className="p-4 sm:p-6">
             <h1 className="text-2xl sm:text-3xl font-bold mb-6">Featured Songs</h1>
             <FeaturedSection songs={featuredSongs} isLoading={featuredLoading}/>
@@ -37,9 +38,11 @@ const HomePage = () => {
             <SectionGrid title="Made For You" songs={madeForYouSongs} isLoading={madeForYouLoading}/>
             <SectionGrid title="Trending" songs={trendingSongs} isLoading={trendingLoading}/>
           </div>
+          <FooterPage/>
           </div>
           
-        </ScrollArea>
+        </div>
+        
 
       </section>
 
