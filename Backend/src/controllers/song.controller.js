@@ -1,4 +1,3 @@
-import { image } from "framer-motion/client";
 import { Song } from "../models/song.model.js";
 
 export const getAllSongs = async (req, res, next) => {
