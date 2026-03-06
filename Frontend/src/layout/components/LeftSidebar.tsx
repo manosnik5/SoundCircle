@@ -4,7 +4,6 @@ import { SignedIn } from '@clerk/clerk-react';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { useState, useEffect } from 'react';
 import PlaylistSkeleton from '@/components/skeletons/PlaylistSkeleton';
 import { useAlbums} from "@/hooks/useMusic";
 
@@ -14,7 +13,6 @@ const LeftSidebar = () => {
 
     if ( albumsLoading) return <div>Loading...</div>;
 
- 
   return (
     <div className='h-full flex flex-col gap-2'>
         <div className='bg-[#121212] rounded-lg p-4'>
