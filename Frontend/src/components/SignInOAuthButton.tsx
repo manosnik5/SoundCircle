@@ -18,7 +18,7 @@ const SignInOAuthButton = () => {
     };
 
     return (
-        <Button onClick={signInWithGoogle} className="px-2 py-4 bg-black text-white cursor-pointer">Continue with Google</Button>
+        <Button variant="ghost" onClick={signInWithGoogle} className="px-2 py-4 bg-black text-white cursor-pointer">Continue with Google</Button>
     )
 }
 
