@@ -41,3 +41,13 @@ export interface Message {
 	createdAt: string;
 	updatedAt: string;
 }
+
+export interface FriendRequest {
+  _id: string;
+  sender: string;
+  receiver: string;
+  status: "pending" | "accepted" | "rejected";
+  createdAt: string;
+  updatedAt: string;
+  senderInfo?: User;
+}
