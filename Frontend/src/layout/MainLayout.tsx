@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/resizable"
 import PlayBackControls from "./components/PlayBackControls"
 import AudioPlayer from "./components/AudioPlayer"
+import BottomBarMenu from "./components/BottomBarMenu"
 import { useEffect, useState } from "react"
 
 
@@ -53,7 +54,8 @@ const MainLayout = () => {
 
        
       </ResizablePanelGroup>
-      <PlayBackControls/>
+      {isMobile ? <BottomBarMenu/> : <PlayBackControls/>}
+      
     </div>
   )
 }
