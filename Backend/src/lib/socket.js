@@ -1,5 +1,6 @@
-import {Server} from "socket.io"
-import { Message } from "../models/message.model.js"
+import { Server } from "socket.io";
+import { Message } from "../models/message.model.js";
+import { User } from "../models/user.model.js";
 
 export const initializeSocket = (server) => {
     const io = new Server(server, {
@@ -7,54 +8,85 @@ export const initializeSocket = (server) => {
             origin: "http://localhost:3000",
             credentials: true
         }
-    })
+    });
 
     const userSockets = new Map();
     const userActivities = new Map();
 
     io.on("connection", (socket) => {
-        socket.on("user_connected" , (userId) => {
+        console.log("User connected:", socket.id);
+
+        socket.on("user_connected", async (userId) => {
             userSockets.set(userId, socket.id);
             userActivities.set(userId, "Idle");
 
-            io.emit("user_connected", userId)
-            socket.emit("users_online", Array.from(userSockets.keys()))
+            const user = await User.findOne({ clerkId: userId });
+            const friends = user?.friends || [];
 
-            io.emit("activities", Array.from(userActivities.entries()))    
-        })
- 
-        socket.on("update_activity", ({userId, activity}) => {
-            console.log("activity_updated", userId, activity)
+            friends.forEach(friendId => {
+                const friendSocketId = userSockets.get(friendId);
+                if (friendSocketId) {
+                    io.to(friendSocketId).emit("user_connected", userId);
+                }
+            });
+
+            const onlineFriends = friends.filter(friendId => userSockets.has(friendId));
+            socket.emit("users_online", onlineFriends);
+
+
+            const friendActivities = Array.from(userActivities.entries())
+                .filter(([uid]) => friends.includes(uid));
+            socket.emit("activities", friendActivities);
+        });
+
+        socket.on("update_activity", async ({ userId, activity }) => {
+            console.log("activity_updated", userId, activity);
             userActivities.set(userId, activity);
-            io.emit("activity_updated", {userId, activity})
-        })
+
+            const user = await User.findOne({ clerkId: userId });
+            const friends = user?.friends || [];
+
+            friends.forEach(friendId => {
+                const friendSocketId = userSockets.get(friendId);
+                if (friendSocketId) {
+                    io.to(friendSocketId).emit("activity_updated", { userId, activity });
+                }
+            });
+        });
 
         socket.on("send_message", async (data) => {
             try {
-                const {senderId, receiverId, content} = data
+                const { senderId, receiverId, content } = data;
+
+                const sender = await User.findOne({ clerkId: senderId });
+                if (!sender?.friends.includes(receiverId)) {
+                    socket.emit("message_error", "Cannot send message to non-friend");
+                    return;
+                }
+
                 const message = await Message.create({
                     senderId,
                     receiverId,
                     content
-                })
+                });
 
-                const receiverSocketId = userSockets.get(receiverId)
+                const receiverSocketId = userSockets.get(receiverId);
 
                 if (receiverSocketId) {
-                    io.to(receiverSocketId).emit("receive_message", message)
+                    io.to(receiverSocketId).emit("receive_message", message);
                 }
 
-                socket.emit("message_sent", message)
-            }catch(error){
-                console.log("message error:", error)
-                socket.emit("message_error", error.message)
+                socket.emit("message_sent", message);
+            } catch (error) {
+                console.log("message error:", error);
+                socket.emit("message_error", error.message);
             }
-        })
+        });
 
-        socket.on("disconnect", () => {
+        socket.on("disconnect", async () => {
             let disconnectedUserId;
-            for(const [userId, socketId] of userSockets.entries()) {
-                if(socketId === socket.id){
+            for (const [userId, socketId] of userSockets.entries()) {
+                if (socketId === socket.id) {
                     disconnectedUserId = userId;
                     userSockets.delete(disconnectedUserId);
                     userActivities.delete(disconnectedUserId);
@@ -62,9 +94,35 @@ export const initializeSocket = (server) => {
                 }
             }
 
-            if (disconnectedUserId){
-                io.emit("user_disconnected", disconnectedUserId)
+            if (disconnectedUserId) {
+                const user = await User.findOne({ clerkId: disconnectedUserId });
+                const friends = user?.friends || [];
+
+                friends.forEach(friendId => {
+                    const friendSocketId = userSockets.get(friendId);
+                    if (friendSocketId) {
+                        io.to(friendSocketId).emit("user_disconnected", disconnectedUserId);
+                    }
+                });
             }
-        })
-    })
-}
+        });
+    });
+
+    return io;
+};
+
+
+export const emitFriendRequestNotification = (io, userSockets, receiverId) => {
+    const receiverSocketId = userSockets.get(receiverId);
+    if (receiverSocketId) {
+        io.to(receiverSocketId).emit("friend_request_received");
+    }
+};
+
+
+export const emitFriendRequestAccepted = (io, userSockets, senderId) => {
+    const senderSocketId = userSockets.get(senderId);
+    if (senderSocketId) {
+        io.to(senderSocketId).emit("friend_request_accepted");
+    }
+};
