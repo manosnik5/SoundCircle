@@ -1,10 +1,11 @@
 import { useUsers } from "@/hooks/useMusic"
 import { useUser } from "@clerk/clerk-react";
 import LoginPromptFriends from "@/components/LoginPromptFriends";
-import { Music, Users } from "lucide-react";
+import { Music, UserPlus, Users } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useSocket } from "@/contexts/SocketContext";
+import { Link } from "react-router-dom";
 
 
 const FriendsActivity = () => {
@@ -19,6 +20,8 @@ const FriendsActivity = () => {
   const { data: users, isLoading: usersLoading } = useUsers();
   const { onlineUsers, userActivities } = useSocket();
 
+  console.log(onlineUsers, userActivities)
+
   if ( usersLoading ) return <div>Loading...</div>;
 
   return (
@@ -28,6 +31,12 @@ const FriendsActivity = () => {
 					<Users className='size-5 shrink-0' />
 					<h2 className='font-semibold'>What they're listening to</h2>
 				</div>
+      </div>
+      <div className="p-4 flex justify-between items-center border-b border-zinc-800">
+					<Link to={"/add-friends"} className='flex items-center gap-2'>
+            Add Friend
+            <UserPlus className="size-5" />
+          </Link>
       </div>
       <ScrollArea  className="flex-1">
         <div className="p-4 space-y-4">
