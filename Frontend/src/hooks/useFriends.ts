@@ -26,7 +26,6 @@ export const useSearchUsers = (query: string) => {
 };
 
 export const useSendFriendRequest = () => {
-  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: friendApi.sendFriendRequest,
