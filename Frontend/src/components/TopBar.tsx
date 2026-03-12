@@ -1,5 +1,5 @@
 import { SignedOut, UserButton } from '@clerk/clerk-react';
-import { Disc, LayoutDashboardIcon, Music, Search } from 'lucide-react';
+import { Bell, Disc, LayoutDashboardIcon, Music, Search } from 'lucide-react';
 import SignInOAuthButton from './SignInOAuthButton';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAdminCheck } from '@/hooks/useMusic';
@@ -60,7 +60,7 @@ const TopBar = () => {
         <img src='/soundCircleLogo.png' className='size-15' alt='SoundCircle logo' />
       </div>
 
-      <div className='flex-1 flex justify-center px-2 min-w-0'>
+      <div className='flex-1 hidden md:flex justify-center px-2 min-w-0'>
         <div className='relative w-full max-w-sm' ref={searchRef}>
           <div className="flex items-center w-full">
             <button
@@ -147,24 +147,21 @@ const TopBar = () => {
           )}
         </div>
       </div>
+      
 
       <div className='flex gap-2 items-center shrink-0'>
+        <Link to={"/friend-requests"} className="p-2 rounded-lg border cursor-pointer block md:hidden">
+            <Bell className='w-6 h-6 text-white' />
+          </Link>
         {isAdmin ? (
           <div className='flex items-center gap-2'>
             <Link
               to="/admin"
-              className={cn(buttonVariants({ variant: "default" }), "hidden sm:flex text-sm px-3 py-1.5")}
+              className={cn(buttonVariants({ variant: "default" }), "flex text-sm px-3 py-1.5")}
             >
               <LayoutDashboardIcon className='size-4 mr-1.5' />
               <span>Admin</span>
-            </Link>
-        
-            <Link
-              to="/admin"
-              className={cn(buttonVariants({ variant: "default", size: "icon" }), "sm:hidden")}
-            >
-              <LayoutDashboardIcon className='size-4' />
-            </Link>
+            </Link>  
             <UserButton />
           </div>
         ) : (
