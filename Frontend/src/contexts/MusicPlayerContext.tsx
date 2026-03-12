@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useState, useRef, type ReactNode, type RefObject } from "react";
 import { type Song } from "@/types";
 import { useSocket } from "./SocketContext";
 import { useAuth } from "@clerk/clerk-react";
@@ -8,12 +8,21 @@ interface MusicPlayerContextType {
     isPlaying: boolean;
     queue: Song[];
     currentIndex: number;
+    volume: number;
+    isMuted: boolean;
+    currentTime: number;
+    duration: number;
+    audioRef: RefObject<HTMLAudioElement | null>; // Changed this
     initializeQueue: (songs: Song[]) => void;
-    playAlbum: (songs: Song[], startIndex?: number) => void
-    setCurrentSong: (song: Song | null) => void
+    playAlbum: (songs: Song[], startIndex?: number) => void;
+    setCurrentSong: (song: Song | null) => void;
     togglePlay: () => void;
     playNext: () => void;
     playPrevious: () => void;
+    setVolume: (volume: number) => void;
+    setIsMuted: (muted: boolean) => void;
+    setCurrentTime: (time: number) => void;
+    setDuration: (duration: number) => void;
 }
 
 const MusicPlayerContext = createContext<MusicPlayerContextType | undefined>(undefined)
@@ -23,6 +32,13 @@ export const MusicPlayerProvider = ({children}: {children: ReactNode}) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [queue, setQueue] = useState<Song[]>([]);
     const [currentIndex, setCurrentIndex] = useState(-1);
+    
+    // Shared playback state
+    const [volume, setVolumeState] = useState(75);
+    const [isMuted, setIsMutedState] = useState(false);
+    const [currentTime, setCurrentTimeState] = useState(0);
+    const [duration, setDurationState] = useState(0);
+    const audioRef = useRef<HTMLAudioElement | null>(null); // Changed this
     
     const { socket } = useSocket();
     const { userId } = useAuth();
@@ -117,18 +133,46 @@ export const MusicPlayerProvider = ({children}: {children: ReactNode}) => {
         }
     }, [currentIndex, queue, updateActivity]);
 
+    const setVolume = useCallback((vol: number) => {
+        setVolumeState(vol);
+        if (audioRef.current) {
+            audioRef.current.volume = vol / 100;
+        }
+    }, []);
+
+    const setIsMuted = useCallback((muted: boolean) => {
+        setIsMutedState(muted);
+    }, []);
+
+    const setCurrentTime = useCallback((time: number) => {
+        setCurrentTimeState(time);
+    }, []);
+
+    const setDuration = useCallback((dur: number) => {
+        setDurationState(dur);
+    }, []);
+
     return (
         <MusicPlayerContext.Provider value={{
             currentSong,
             isPlaying,
             queue,
             currentIndex,
+            volume,
+            isMuted,
+            currentTime,
+            duration,
+            audioRef,
             initializeQueue,
             playAlbum,
             setCurrentSong,
             togglePlay,
             playNext,
             playPrevious,
+            setVolume,
+            setIsMuted,
+            setCurrentTime,
+            setDuration,
         }}>
             {children}
         </MusicPlayerContext.Provider>
