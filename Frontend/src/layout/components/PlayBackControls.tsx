@@ -80,7 +80,7 @@ const PlayBackControls = () => {
     }
 
   return (
-    <div className="h-20 sm:h-22 bg-[#121212] px-4 dark">
+    <div className="h-20 bg-[#121212] px-4 dark">
         <div className="flex justify-between items-center h-full max-w-450 mx-auto">
             <div className="hidden sm:flex items-center gap-4 min-w-45 w-[30%]">
                 {currentSong && (
