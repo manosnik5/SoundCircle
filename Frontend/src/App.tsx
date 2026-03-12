@@ -8,6 +8,11 @@ import AlbumPage from './pages/album/AlbumPage';
 import AdminPage from './pages/admin/AdminPage';
 import NotFoundPage from './pages/notFound/NotFoundPage';
 import { Toaster } from "react-hot-toast"
+import PlaylistPage from './pages/playlists/PlaylistPage';
+import SearchPage from './pages/search/SearchPage';
+import FriendsPage from './pages/friends/FriendsPage';
+import FriendRequestsPage from './pages/friends/FriendRequestsPage';
+import AddFriendsPage from './pages/friends/AddFriendsPage';
 
 
 function App() {
@@ -23,7 +28,13 @@ function App() {
       <Route element={<MainLayout/>}>
          <Route path="/" element={<HomePage/>} />
          <Route path="/chat" element={<ChatPage/>} />
+         <Route path="/playlist" element={<PlaylistPage/>}/>
+         <Route path="/search" element={<SearchPage/>}/>
+         <Route path="/friends" element={<FriendsPage/>}/>
          <Route path="*" element={<NotFoundPage/>} />
+         <Route path="/friend-requests" element={<FriendRequestsPage />} />
+          <Route path="/add-friends" element={<AddFriendsPage />} />
+         
          <Route path="/albums/:albumId" element={<AlbumPage/>}/>
       </Route>
     </Routes>
