@@ -27,10 +27,19 @@ interface ChatContainerProps {
 
 const ChatContainer = ({ selectedUser, messages, currentUser }: ChatContainerProps) => {
   const messageEndRef = useRef<HTMLDivElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { onlineUsers } = useSocket();
 
   useEffect(() => {
-    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (scrollAreaRef.current) {
+      const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (viewport) {
+        viewport.scrollTo({
+          top: viewport.scrollHeight,
+          behavior: 'smooth'
+        });
+      }
+    }
   }, [messages]);
 
   return (
@@ -49,8 +58,8 @@ const ChatContainer = ({ selectedUser, messages, currentUser }: ChatContainerPro
           </div>
         </div>
       </div>
-
-      <ScrollArea className='h-[calc(100vh-340px)]'>
+}
+      <ScrollArea className='h-[calc(100vh-340px)]' ref={scrollAreaRef}>
         <div className='p-4 space-y-4'>
           {messages?.length ? (
             <>
