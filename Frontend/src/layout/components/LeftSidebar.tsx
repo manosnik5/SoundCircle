@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { HomeIcon, MessageCircle, Library } from 'lucide-react'
+import { HomeIcon, MessageCircle, Library, UserPlus, Bell } from 'lucide-react'
 import { SignedIn } from '@clerk/clerk-react';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
@@ -40,6 +40,17 @@ const LeftSidebar = () => {
                     )}>
                         <MessageCircle className='size-5 mr-2' />
                         <span className='hidden md:inline'>Messages</span>
+                    </Link>
+                     <Link to={"/friend-requests"}
+                            className={cn(
+                        buttonVariants({ 
+                            variant: "ghost",
+                            className: "w-full justify-start text-white hover:bg-[#303030] hover:text-white"
+                            }
+                        ),
+                    )}>
+                        <Bell className='size-5 mr-2' />
+                        <span className='hidden md:inline'>Notifications</span>
                     </Link>
                 </SignedIn>
             </div>
