@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { HomeIcon, MessageCircle, Library, UserPlus, Bell } from 'lucide-react'
+import { HomeIcon, MessageCircle, Library, Bell } from 'lucide-react'
 import { SignedIn } from '@clerk/clerk-react';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
