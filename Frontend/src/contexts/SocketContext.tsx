@@ -4,6 +4,7 @@ import { io, Socket } from "socket.io-client";
 import { useAuth } from "@clerk/clerk-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { chatKeys } from "@/hooks/useChat";
+import { friendKeys } from "@/hooks/useFriends";
 import type { Message } from "@/types";
 
 
@@ -17,7 +18,7 @@ interface SocketContextType {
 
 const SocketContext = createContext<SocketContextType | undefined>(undefined);
 
-const baseURL = import.meta.env.MODE === "development" ? "http://localhost:5000/api" : "/";
+const baseURL = import.meta.env.MODE === "development" ? "http://localhost:5000/" : "/";
 
 export const SocketProvider = ({children}: { children: ReactNode }) => {
     const { userId } = useAuth();
@@ -102,6 +103,19 @@ export const SocketProvider = ({children}: { children: ReactNode }) => {
                 newMap.set(activityUserId, activity);
                 return newMap;
             });
+        });
+
+        socket.on("friend_request_received", () => {
+            console.log("Friend request received");
+
+            queryClient.invalidateQueries({ queryKey: friendKeys.pendingRequests() });
+        });
+
+
+        socket.on("friend_request_accepted", () => {
+            console.log("Friend request accepted");
+
+            queryClient.invalidateQueries({ queryKey: chatKeys.users() });
         });
 
         setSocket(socket);
