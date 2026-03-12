@@ -1,17 +1,49 @@
 import { User } from "../models/user.model.js";
 import { Message } from "../models/message.model.js"
 
-export const getAllUsers = async (req, res, next) => {
+export const getAllFriends = async (req, res, next) => {
     try {
-        const currentUser = req.auth.userId;
-        const users = await User.find({
-            clerkId: { $ne: currentUser }
+        const currentUserId = req.auth.userId;
+        
+        const currentUser = await User.findOne({ clerkId: currentUserId });
+        
+        if (!currentUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const users = await User.find({ 
+            clerkId: { 
+                $ne: currentUserId, 
+                $in: currentUser.friends 
+            } 
         });
+
         res.status(200).json(users);
     }catch (error) {
         next(error);
     }
 }
+
+export const searchUsers = async (req, res, next) => {
+    try {
+        const currentUserId = req.auth.userId;
+        const { query } = req.query;
+
+        const searchQuery = {
+            clerkId: { $ne: currentUserId },
+        };
+
+        if (query) {
+            searchQuery.fullName = { $regex: query, $options: 'i' };
+        }
+
+        const users = await User.find(searchQuery).limit(20);
+        
+        res.status(200).json(users);
+    } catch (error) {
+        next(error);
+    }
+};
 
 export const getMessages = async (req, res, next) => {
     try {
