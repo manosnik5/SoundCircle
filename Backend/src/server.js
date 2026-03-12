@@ -6,6 +6,7 @@ import authRoutes from './routes/auth.route.js';
 import songRoutes from './routes/song.route.js';
 import albumRoutes from './routes/album.route.js';
 import statRoutes from './routes/stat.route.js';
+import friendRoutes from './routes/friend.route.js';
 import { connectDB } from './lib/db.js';
 import { clerkMiddleware } from '@clerk/express';
 import fileupload from 'express-fileupload';
@@ -62,6 +63,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/songs', songRoutes);
 app.use('/api/albums', albumRoutes);
 app.use('/api/stats', statRoutes);
+app.use('/api/friends', friendRoutes);
 
 if(process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../Frontend/dist")))
