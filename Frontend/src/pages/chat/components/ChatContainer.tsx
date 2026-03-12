@@ -58,7 +58,7 @@ const ChatContainer = ({ selectedUser, messages, currentUser }: ChatContainerPro
           </div>
         </div>
       </div>
-}
+
       <ScrollArea className='h-[calc(100vh-340px)]' ref={scrollAreaRef}>
         <div className='p-4 space-y-4'>
           {messages?.length ? (
