@@ -69,12 +69,13 @@ app.use('/api/friends', friendRoutes);
 if(process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../Frontend/dist")));
   
-
-  app.get("*", (req, res) => {
+  app.use((req, res, next) => {
+    if (req.path.startsWith('/api')) {
+      return next();
+    }
     res.sendFile(path.join(__dirname, "../Frontend/dist/index.html"));
   });
 }
-
 
 app.use((err, req, res, next) => {
   res.status(500).json({ message: process.env.NODE_ENV === "production" ? "Internal server error" : err.message });
