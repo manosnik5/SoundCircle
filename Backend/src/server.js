@@ -65,12 +65,16 @@ app.use('/api/albums', albumRoutes);
 app.use('/api/stats', statRoutes);
 app.use('/api/friends', friendRoutes);
 
+
 if(process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../Frontend/dist")))
-  app.get("/", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "../Frontend/dist/index.html"))
-  })
+  app.use(express.static(path.join(__dirname, "../Frontend/dist")));
+  
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../Frontend/dist/index.html"));
+  });
 }
+
 
 app.use((err, req, res, next) => {
   res.status(500).json({ message: process.env.NODE_ENV === "production" ? "Internal server error" : err.message });
@@ -80,4 +84,3 @@ httpServer.listen(PORT, () => {
   console.log('Server is running on port', PORT);
   connectDB();
 });
-
