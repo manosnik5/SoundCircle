@@ -32,13 +32,11 @@ export const MusicPlayerProvider = ({children}: {children: ReactNode}) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [queue, setQueue] = useState<Song[]>([]);
     const [currentIndex, setCurrentIndex] = useState(-1);
-    
-    // Shared playback state
     const [volume, setVolumeState] = useState(75);
     const [isMuted, setIsMutedState] = useState(false);
     const [currentTime, setCurrentTimeState] = useState(0);
     const [duration, setDurationState] = useState(0);
-    const audioRef = useRef<HTMLAudioElement | null>(null); // Changed this
+    const audioRef = useRef<HTMLAudioElement | null>(null); 
     
     const { socket } = useSocket();
     const { userId } = useAuth();
