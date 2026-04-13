@@ -17,6 +17,10 @@ const PlayBackControls = () => {
         playNext, 
         playPrevious, 
         togglePlay,
+        isShuffle,
+        repeatMode,
+        toggleShuffle,
+        toggleRepeatMode,
         volume,
         setVolume,
         isMuted,
@@ -27,6 +31,7 @@ const PlayBackControls = () => {
     } = usePlayer();
     
     const [previousVolume, setPreviousVolume] = useState(75);
+    const [hoverButton, setHoverButton] = useState<"shuffle" | "repeat" | null>(null);
 
     const handleSongBar = (value: number[]) => {
         if (audioRef.current) {
@@ -77,13 +82,24 @@ const PlayBackControls = () => {
             </div>
             <div className='flex flex-col items-center gap-2 flex-1 max-w-full sm:max-w-[45%]'>
                 <div className='flex items-center gap-4 sm:gap-6'>
-                    <Button
-                        size='icon'
-                        variant='ghost'
-                        className='hidden sm:inline-flex hover:text-white text-zinc-400 cursor-pointer'
-                    >
-                        <Shuffle className='h-4 w-4' />
-                    </Button>
+                    <div className='relative hidden sm:inline-flex'>
+                        {hoverButton === "shuffle" && (
+                            <div className='absolute -top-10 left-1/2 z-10 w-max -translate-x-1/2 rounded-md bg-zinc-950 px-3 py-1 text-xs text-white shadow-lg'>
+                                Shuffle: random track order
+                            </div>
+                        )}
+                        <Button
+                            size='icon'
+                            variant='ghost'
+                            className={`inline-flex cursor-pointer ${isShuffle ? "text-white" : "text-zinc-400"} hover:text-white`}
+                            onClick={toggleShuffle}
+                            onMouseEnter={() => setHoverButton("shuffle")}
+                            onMouseLeave={() => setHoverButton(null)}
+                            aria-label='Toggle shuffle'
+                        >
+                            <Shuffle className='h-4 w-4' />
+                        </Button>
+                    </div>
                     <Button
                         size='icon'
                         variant='ghost'
@@ -106,18 +122,29 @@ const PlayBackControls = () => {
                         size='icon'
                         variant='ghost'
                         className='hover:text-white text-zinc-400 cursor-pointer'
-                        onClick={playNext}
+                        onClick={() => playNext()}
                         disabled={!currentSong}
                     >
                         <SkipForward className='h-4 w-4' />
                     </Button>
-                    <Button
-                        size='icon'
-                        variant='ghost'
-                        className='hidden sm:inline-flex hover:text-white text-zinc-400 cursor-pointer'
-                    >
-                        <Repeat className='h-4 w-4' />
-                    </Button>
+                    <div className='relative hidden sm:inline-flex'>
+                        {hoverButton === "repeat" && (
+                            <div className='absolute -top-10 left-1/2 z-10 w-max -translate-x-1/2 rounded-md bg-zinc-950 px-3 py-1 text-xs text-white shadow-lg'>
+                                Repeat one: replay current song
+                            </div>
+                        )}
+                        <Button
+                            size='icon'
+                            variant='ghost'
+                            className={`inline-flex cursor-pointer ${repeatMode !== "off" ? "text-white" : "text-zinc-400"} hover:text-white`}
+                            onClick={toggleRepeatMode}
+                            onMouseEnter={() => setHoverButton("repeat")}
+                            onMouseLeave={() => setHoverButton(null)}
+                            aria-label='Toggle repeat mode'
+                        >
+                            <Repeat className='h-4 w-4' />
+                        </Button>
+                    </div>
                 </div>
                 <div className="hidden sm:flex items-center gap-2 w-full">
                     <div className='text-xs text-zinc-400'>{formatTime(currentTime)}</div>
