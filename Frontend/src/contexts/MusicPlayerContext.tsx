@@ -12,12 +12,16 @@ interface MusicPlayerContextType {
     isMuted: boolean;
     currentTime: number;
     duration: number;
-    audioRef: RefObject<HTMLAudioElement | null>; // Changed this
+    isShuffle: boolean;
+    repeatMode: "off" | "one";
+    audioRef: RefObject<HTMLAudioElement | null>;
     initializeQueue: (songs: Song[]) => void;
     playAlbum: (songs: Song[], startIndex?: number) => void;
     setCurrentSong: (song: Song | null) => void;
     togglePlay: () => void;
-    playNext: () => void;
+    toggleShuffle: () => void;
+    toggleRepeatMode: () => void;
+    playNext: (fromEnded?: boolean) => void;
     playPrevious: () => void;
     setVolume: (volume: number) => void;
     setIsMuted: (muted: boolean) => void;
@@ -36,6 +40,8 @@ export const MusicPlayerProvider = ({children}: {children: ReactNode}) => {
     const [isMuted, setIsMutedState] = useState(false);
     const [currentTime, setCurrentTimeState] = useState(0);
     const [duration, setDurationState] = useState(0);
+    const [isShuffle, setIsShuffle] = useState(false);
+    const [repeatMode, setRepeatMode] = useState<"off" | "one">("off");
     const audioRef = useRef<HTMLAudioElement | null>(null); 
     
     const { socket } = useSocket();
@@ -85,6 +91,26 @@ export const MusicPlayerProvider = ({children}: {children: ReactNode}) => {
         }
     }, [queue, updateActivity]);
 
+    const getRandomIndex = useCallback((excludeIndex: number | null = null) => {
+        if (queue.length === 0) return -1;
+        if (queue.length === 1) return 0;
+
+        let randomIndex = excludeIndex ?? -1;
+        while (randomIndex === excludeIndex) {
+            randomIndex = Math.floor(Math.random() * queue.length);
+        }
+
+        return randomIndex;
+    }, [queue.length]);
+
+    const toggleShuffle = useCallback(() => {
+        setIsShuffle((prev) => !prev);
+    }, []);
+
+    const toggleRepeatMode = useCallback(() => {
+        setRepeatMode((prev) => (prev === "off" ? "one" : "off"));
+    }, []);
+
     const togglePlay = useCallback(() => {
         const willStartPlaying = !isPlaying;
         
@@ -97,39 +123,61 @@ export const MusicPlayerProvider = ({children}: {children: ReactNode}) => {
         setIsPlaying(willStartPlaying);
     }, [isPlaying, currentSong, updateActivity])
 
-    const playNext = useCallback(() => {
-        const nextIndex = currentIndex + 1;
+    const playNext = useCallback((fromEnded = false) => {
+        if (fromEnded && repeatMode === "one" && currentSong) {
+            if (audioRef.current) {
+                audioRef.current.currentTime = 0;
+                audioRef.current.play().catch((err) => console.log("Play error:", err));
+            }
 
-        if (nextIndex < queue.length) {
-            const nextSong = queue[nextIndex];
-            
-            updateActivity(`Playing ${nextSong.title} by ${nextSong.artist}`);
-            
-            setCurrentSongState(nextSong);
-            setCurrentIndex(nextIndex);
+            setCurrentTimeState(0);
             setIsPlaying(true);
-        } else {
+            updateActivity(`Playing ${currentSong.title} by ${currentSong.artist}`);
+            return;
+        }
+
+        let nextIndex = isShuffle ? getRandomIndex(currentIndex) : currentIndex + 1;
+
+        if (nextIndex >= queue.length || nextIndex < 0) {
             updateActivity("Idle");
             setIsPlaying(false);
+            return;
         }
-    }, [currentIndex, queue, updateActivity]);
+
+        const nextSong = queue[nextIndex];
+        if (!nextSong) {
+            updateActivity("Idle");
+            setIsPlaying(false);
+            return;
+        }
+
+        updateActivity(`Playing ${nextSong.title} by ${nextSong.artist}`);
+        setCurrentSongState(nextSong);
+        setCurrentIndex(nextIndex);
+        setIsPlaying(true);
+    }, [currentIndex, currentSong, isShuffle, queue, repeatMode, getRandomIndex, updateActivity]);
 
     const playPrevious = useCallback(() => {
-        const prevIndex = currentIndex - 1;
+        let prevIndex = isShuffle ? getRandomIndex(currentIndex) : currentIndex - 1;
 
-        if (prevIndex >= 0) {
-            const prevSong = queue[prevIndex];
-            
-            updateActivity(`Playing ${prevSong.title} by ${prevSong.artist}`);
-            
-            setCurrentSongState(prevSong);
-            setCurrentIndex(prevIndex);
-            setIsPlaying(true);
-        } else {
+        if (prevIndex < 0) {
             updateActivity("Idle");
             setIsPlaying(false);
+            return;
         }
-    }, [currentIndex, queue, updateActivity]);
+
+        const prevSong = queue[prevIndex];
+        if (!prevSong) {
+            updateActivity("Idle");
+            setIsPlaying(false);
+            return;
+        }
+
+        updateActivity(`Playing ${prevSong.title} by ${prevSong.artist}`);
+        setCurrentSongState(prevSong);
+        setCurrentIndex(prevIndex);
+        setIsPlaying(true);
+    }, [currentIndex, isShuffle, queue, repeatMode, getRandomIndex, updateActivity]);
 
     const setVolume = useCallback((vol: number) => {
         setVolumeState(vol);
@@ -169,6 +217,10 @@ export const MusicPlayerProvider = ({children}: {children: ReactNode}) => {
             playPrevious,
             setVolume,
             setIsMuted,
+            isShuffle,
+            repeatMode,
+            toggleShuffle,
+            toggleRepeatMode,
             setCurrentTime,
             setDuration,
         }}>
