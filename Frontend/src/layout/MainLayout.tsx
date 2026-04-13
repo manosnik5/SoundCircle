@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 import LeftSidebar from "./components/LeftSidebar"
 import FriendsActivity from "./components/FriendsActivity"
 import {
@@ -9,11 +9,15 @@ import {
 import PlayBackControls from "./components/PlayBackControls"
 import AudioPlayer from "./components/AudioPlayer"
 import BottomBarMenu from "./components/BottomBarMenu"
+import MobileMiniPlayer from "./components/MobileMiniPlayer"
+import MobilePlayBackPanel from "./components/MobilePlayBackPanel"
 import { useEffect, useState } from "react"
 
 
 const MainLayout = () => {
+    const navigate = useNavigate();
     const [isMobile, setIsMobile] = useState(false)
+    const [mobilePanelOpen, setMobilePanelOpen] = useState(false)
 
     useEffect(() => {
       const handleMobile = () => {
@@ -25,6 +29,13 @@ const MainLayout = () => {
 
       return () => window.removeEventListener("resize", handleMobile)
     }, [])
+
+    useEffect(() => {
+      if (!isMobile && mobilePanelOpen) {
+        setMobilePanelOpen(false);
+        navigate("/");
+      }
+    }, [isMobile, mobilePanelOpen, navigate])
   return (
     <div className="h-screen bg-[#121212] text-white flex flex-col">
       <AudioPlayer/>
@@ -54,8 +65,17 @@ const MainLayout = () => {
 
        
       </ResizablePanelGroup>
-      {isMobile ? <BottomBarMenu/> : <PlayBackControls/>}
-      
+      {isMobile ? (
+        <>
+          <div className="flex justify-center">
+            <MobileMiniPlayer onOpen={() => setMobilePanelOpen(true)} />
+          </div>
+          <BottomBarMenu />
+        </>
+      ) : (
+        <PlayBackControls />
+      )}
+      {mobilePanelOpen && <MobilePlayBackPanel onClose={() => setMobilePanelOpen(false)} />}
     </div>
   )
 }
