@@ -13,7 +13,7 @@ import SearchPage from './pages/search/SearchPage';
 import FriendsPage from './pages/friends/FriendsPage';
 import FriendRequestsPage from './pages/friends/FriendRequestsPage';
 import AddFriendsPage from './pages/friends/AddFriendsPage';
-
+import PlaylistDetailPage from './pages/playlists/PlaylistDetailPage';
 
 function App() {
 
@@ -29,6 +29,7 @@ function App() {
          <Route path="/" element={<HomePage/>} />
          <Route path="/chat" element={<ChatPage/>} />
          <Route path="/playlist" element={<PlaylistPage/>}/>
+         <Route path="/playlist/:playlistId" element={<PlaylistDetailPage/>}/>
          <Route path="/search" element={<SearchPage/>}/>
          <Route path="/friends" element={<FriendsPage/>}/>
          <Route path="*" element={<NotFoundPage/>} />
