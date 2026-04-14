@@ -38,7 +38,7 @@ const SongsTable = () => {
                     <TableHead className='w-12.5'></TableHead>
 					<TableHead>Title</TableHead>
 					<TableHead>Artist</TableHead>
-					<TableHead>Release Date</TableHead>
+					<TableHead>Added Date</TableHead>
 					<TableHead className='text-right'>Actions</TableHead>
                 </TableRow>
                 <TableBody>
