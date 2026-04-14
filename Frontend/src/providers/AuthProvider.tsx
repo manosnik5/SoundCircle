@@ -40,10 +40,7 @@ const AuthProvider = ({children}: {children: React.ReactNode}) => {
                 try {
                     const token = await getToken();
                     if (token) {
-                        config.headers = {
-                            ...config.headers,
-                            Authorization: `Bearer ${token}`,
-                        };
+                        config.headers.set('Authorization', `Bearer ${token}`);
                     }
                 } catch (error) {
                     console.error("Error refreshing auth token:", error);
