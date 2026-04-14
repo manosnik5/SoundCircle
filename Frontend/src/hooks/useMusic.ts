@@ -15,6 +15,8 @@ export const musicKeys = {
     admin: () => [...musicKeys.all, "admin"] as const,
     searchSongs: (query: string) => [...musicKeys.all, "search", "songs", query] as const,
     searchAlbums: (query: string) => [...musicKeys.all, "search", "albums", query] as const,
+    playlists: () => [...musicKeys.all, "playlists"] as const,
+    playlist: (id: string) => [...musicKeys.playlists(), id] as const,
 }
 
 export const useSongs = () => {
@@ -55,6 +57,103 @@ export const useAlbums = () => {
         queryFn: musicApi.getAlbums,
     })
 }
+
+export const usePlaylists = (enabled: boolean = true) => {
+  return useQuery({
+    queryKey: musicKeys.playlists(),
+    queryFn: musicApi.getPlaylists,
+    enabled,
+  });
+};
+
+export const usePlaylist = (playlistId: string, enabled: boolean = true) => {
+  return useQuery({
+    queryKey: musicKeys.playlist(playlistId),
+    queryFn: () => musicApi.getPlaylistById(playlistId),
+    enabled: enabled && !!playlistId,
+  });
+};
+
+export const useCreatePlaylist = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: musicApi.createPlaylist,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: musicKeys.playlists() });
+    },
+    onError: (error: any) => {
+      console.error("Error creating playlist:", error);
+      toast.error(error.response?.data?.message || "Failed to create playlist");
+    },
+  });
+};
+
+export const useAddSongToPlaylist = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ playlistId, songId }: { playlistId: string; songId: string }) =>
+      musicApi.addSongToPlaylist(playlistId, songId),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: musicKeys.playlists() });
+      queryClient.invalidateQueries({ queryKey: musicKeys.playlist(variables.playlistId) });
+    },
+    onError: (error: any) => {
+      console.error("Error adding song to playlist:", error);
+      toast.error(error.response?.data?.message || "Failed to add song to playlist");
+    },
+  });
+};
+
+export const useUpdatePlaylist = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ playlistId, payload }: { playlistId: string; payload: FormData }) =>
+      musicApi.updatePlaylist(playlistId, payload),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: musicKeys.playlists() });
+      queryClient.invalidateQueries({ queryKey: musicKeys.playlist(variables.playlistId) });
+    },
+    onError: (error: any) => {
+      console.error("Error updating playlist:", error);
+      toast.error(error.response?.data?.message || "Failed to update playlist");
+    },
+  });
+};
+
+export const useRemoveSongFromPlaylist = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ playlistId, songId }: { playlistId: string; songId: string }) =>
+      musicApi.removeSongFromPlaylist(playlistId, songId),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: musicKeys.playlists() });
+      queryClient.invalidateQueries({ queryKey: musicKeys.playlist(variables.playlistId) });
+    },
+    onError: (error: any) => {
+      console.error("Error removing song from playlist:", error);
+      toast.error(error.response?.data?.message || "Failed to remove song from playlist");
+    },
+  });
+};
+
+export const useDeletePlaylist = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (playlistId: string) => musicApi.deletePlaylist(playlistId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: musicKeys.playlists() });
+    },
+    onError: (error: any) => {
+      console.error("Error deleting playlist:", error);
+      toast.error(error.response?.data?.message || "Failed to delete playlist");
+    },
+  });
+};
 
 export const useStats = (enabled: boolean = true) => {
   return useQuery({
