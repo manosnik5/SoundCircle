@@ -5,6 +5,7 @@ import adminRoutes from './routes/admin.route.js';
 import authRoutes from './routes/auth.route.js';
 import songRoutes from './routes/song.route.js';
 import albumRoutes from './routes/album.route.js';
+import playlistRoutes from './routes/playlist.route.js';
 import statRoutes from './routes/stat.route.js';
 import friendRoutes from './routes/friend.route.js';
 import { connectDB } from './lib/db.js';
@@ -31,6 +32,7 @@ app.use(cors(
 ))
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(clerkMiddleware());
 app.use(fileupload({
     useTempFiles: true,
@@ -62,6 +64,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/songs', songRoutes);
 app.use('/api/albums', albumRoutes);
+app.use('/api/playlists', playlistRoutes);
 app.use('/api/stats', statRoutes);
 app.use('/api/friends', friendRoutes);
 
