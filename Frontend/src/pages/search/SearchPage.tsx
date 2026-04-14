@@ -124,8 +124,7 @@ const SearchPage = () => {
                         <div className="flex-1 min-w-0">
                           <p className="text-white font-medium truncate">{song.title}</p>
                           <p className="text-zinc-400 text-sm truncate">{song.artist}</p>
-                        </div>
-                        <PlayButton song={song} />
+                        </div>                     
                       </div>
                     ))}
                   </div>
