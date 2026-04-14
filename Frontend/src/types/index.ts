@@ -19,6 +19,17 @@ export interface Album {
 	songs: Song[];    
 }
 
+export interface Playlist {
+  _id: string;
+  title: string;
+  description?: string;
+  imageUrl?: string;
+  ownerId: string;
+  songs: Song[];
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface User {
 	_id: string;
 	clerkId: string;
