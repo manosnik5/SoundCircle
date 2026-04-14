@@ -1,5 +1,5 @@
 import { axiosInstance } from "@/lib/axios";
-import type { Album, Song, Stats, User } from "@/types";
+import type { Album, Song, Stats, User, Playlist } from "@/types";
 
 export const musicApi = {
     getSongs: async (): Promise<Song[]> => {
@@ -35,6 +35,37 @@ export const musicApi = {
   },
     getUsers: async (): Promise<User[]> => {
         const response = await axiosInstance.get("/users");
+        return response.data;
+    },
+    getPlaylists: async (): Promise<Playlist[]> => {
+        const response = await axiosInstance.get("/playlists");
+        return response.data;
+    },
+    createPlaylist: async (data: { title: string; description?: string }): Promise<Playlist> => {
+        const response = await axiosInstance.post("/playlists", data);
+        return response.data;
+    },
+    addSongToPlaylist: async (playlistId: string, songId: string): Promise<Playlist> => {
+        const response = await axiosInstance.post(`/playlists/${playlistId}/songs`, { songId });
+        return response.data;
+    },
+    getPlaylistById: async (playlistId: string): Promise<Playlist> => {
+        const response = await axiosInstance.get(`/playlists/${playlistId}`);
+        return response.data;
+    },
+    updatePlaylist: async (playlistId: string, data: FormData): Promise<Playlist> => {
+        const response = await axiosInstance.put(`/playlists/${playlistId}`, data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        return response.data;
+    },
+    deletePlaylist: async (playlistId: string): Promise<void> => {
+        await axiosInstance.delete(`/playlists/${playlistId}`);
+    },
+    removeSongFromPlaylist: async (playlistId: string, songId: string): Promise<Playlist> => {
+        const response = await axiosInstance.delete(`/playlists/${playlistId}/songs/${songId}`);
         return response.data;
     },
     checkAdmin: async (): Promise<{ admin: boolean }> => {
