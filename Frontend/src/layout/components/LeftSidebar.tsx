@@ -1,17 +1,17 @@
 import { Link } from 'react-router-dom'
 import { HomeIcon, MessageCircle, Library, Bell } from 'lucide-react'
-import { SignedIn } from '@clerk/clerk-react';
+import { SignedIn, useAuth } from '@clerk/clerk-react';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 import { ScrollArea } from "@/components/ui/scroll-area"
 import PlaylistSkeleton from '@/components/skeletons/PlaylistSkeleton';
-import { useAlbums} from "@/hooks/useMusic";
+import { usePlaylists } from "@/hooks/useMusic";
 
 const LeftSidebar = () => {
-    const isLoading = false;
-    const { data: albums, isLoading: albumsLoading } = useAlbums();
+    const { isSignedIn } = useAuth();
+    const { data: playlists, isLoading: playlistsLoading } = usePlaylists(isSignedIn);
 
-    if ( albumsLoading) return <div>Loading...</div>;
+    if (playlistsLoading) return <div>Loading...</div>;
 
   return (
     <div className='h-full flex flex-col gap-2'>
@@ -61,27 +61,51 @@ const LeftSidebar = () => {
                     <Library className='size-5 mr-2' />
                     <span className='hidden md:inline'>Playlists</span>
                 </div>
+                <Link
+                  to="/playlist"
+                  className={cn(
+                    buttonVariants({
+                      variant: "ghost",
+                      className: "hidden md:inline-flex items-center text-zinc-400 hover:text-white"
+                    })
+                  )}
+                >
+                  View all
+                </Link>
             </div>
             
             <ScrollArea className='h-[calc(100vh-300px)]'>
                 <div className='space-y-2'>
-                    {isLoading ? (
+                    {playlistsLoading ? (
                         <PlaylistSkeleton />
+                    ) : playlists && playlists.length > 0 ? (
+                        playlists.map((playlist) => {
+                          const playlistImage = playlist.imageUrl;
+                          return (
+                            <Link to={`/playlist/${playlist._id}`}
+                              key={playlist._id}
+                              className='p-2 rounded-md flex items-center gap-3 group cursor-pointer hover:bg-zinc-800'
+                            >
+                              {playlistImage ? (
+                                <img src={playlistImage} alt="playlist image" className='size-12 rounded-md shrink-0 object-cover'/>
+                              ) : (
+                                <div className='size-12 rounded-md shrink-0 bg-zinc-800' />
+                              )}
+                              <div className='flex-1 min-w-0 hidden md:block'>
+                                  <p className='font-medium truncate'>
+                                      {playlist.title}
+                                  </p>
+                                  <p className='text-sm text-zinc-400 truncate'>
+                                      {playlist.songs?.length ?? 0} {playlist.songs?.length === 1 ? 'song' : 'songs'}
+                                  </p>
+                              </div>
+                            </Link>
+                          );
+                        })
                     ) : (
-                        albums?.map((album) => (
-                           <Link to={`/albums/${album._id}`}
-                           key={album._id} className='p-2 rounded-md flex items-center gap-3 group cursor-pointer hover:bg-zinc-800'>
-                             <img src={album.imageUrl} alt="playlist image" className='size-12 rounded-md shrink-0 object-cover'/>
-                            <div className='flex-1 min-w-0 hidden md:block'>
-                                <p className='font-medium truncate'>
-                                    {album.title}
-                                </p>
-                                <p className='text-sm text-zinc-400 truncate'>
-                                    Album: {album.artist}
-                                </p>
-                            </div>
-                           </Link> 
-                        ))
+                        <div className='text-sm text-zinc-400 px-2'>
+                          No playlists yet. Create one from the playlist page.
+                        </div>
                     )}
                 </div>
             </ScrollArea>
