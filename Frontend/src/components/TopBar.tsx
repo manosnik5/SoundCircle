@@ -1,4 +1,4 @@
-import { SignedOut, UserButton } from '@clerk/clerk-react';
+import { SignedOut, useAuth, UserButton } from '@clerk/clerk-react';
 import { Bell, Disc, LayoutDashboardIcon, Music, Search } from 'lucide-react';
 import SignInOAuthButton from './SignInOAuthButton';
 import { Link, useNavigate } from 'react-router-dom';
@@ -12,6 +12,7 @@ import PlayButton from '@/pages/home/components/PlayButton';
 
 const TopBar = () => {
   const { data: isAdmin, isLoading } = useAdminCheck();
+  const { isSignedIn } = useAuth();
   const [inputValue, setInputValue] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [showResults, setShowResults] = useState(false);
@@ -150,9 +151,12 @@ const TopBar = () => {
       
 
       <div className='flex gap-2 items-center shrink-0'>
-        <Link to={"/friend-requests"} className="p-2 rounded-lg border cursor-pointer block md:hidden">
+        {isSignedIn && (
+           <Link to={"/friend-requests"} className="p-2 rounded-lg border cursor-pointer block md:hidden">
             <Bell className='w-6 h-6 text-white' />
           </Link>
+        )}
+       
         {isAdmin ? (
           <div className='flex items-center gap-2'>
             <Link
