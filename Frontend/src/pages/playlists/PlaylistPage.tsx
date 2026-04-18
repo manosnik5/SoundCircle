@@ -57,50 +57,50 @@ const PlaylistPage = () => {
           : "pb-0"
       }`}
     >
-      <TopBar />
+    <TopBar />
 
-      <div className="flex-1 min-h-0 p-6 flex flex-col">
-        <div className="flex flex-col gap-6 mb-6">
-          <div className="flex items-center gap-3">
-            <div className="bg-linear-to-br from-[#8b5cf6] to-[#694bcc] p-3 rounded-lg">
-              <Library className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold text-white">Your Playlists</h1>
-              <p className="text-zinc-400 text-sm mt-1">
-                {playlists?.length ?? 0} {playlists?.length === 1 ? "playlist" : "playlists"}
-              </p>
-            </div>
+    <div className="flex-1 min-h-0 p-6 flex flex-col">
+      <div className="flex flex-col gap-6 mb-6">
+        <div className="flex items-center gap-3">
+          <div className="bg-linear-to-br from-[#8b5cf6] to-[#694bcc] p-3 rounded-lg">
+            <Library className="w-6 h-6 text-white" />
           </div>
-
-          <SignedIn>
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between bg-zinc-950/70 rounded-xl p-4 border border-zinc-800">
-              <div className="flex-1 min-w-0">
-                <label className="text-sm text-zinc-400">Create new playlist</label>
-                <input
-                  value={title}
-                  onChange={(event) => setTitle(event.target.value)}
-                  placeholder="Playlist name"
-                  className="mt-2 w-full rounded-xl border border-zinc-800 bg-[#131313] px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#694bcc]"
-                />
-              </div>
-              <button
-                onClick={handleCreatePlaylist}
-                disabled={!title.trim() || creating}
-                className="inline-flex items-center justify-center sm:mt-6 gap-2 rounded-xl bg-[#694bcc] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#775ad4] disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                <Plus className="w-4 h-4" />
-                Create playlist
-              </button>
-            </div>
-          </SignedIn>
-
-          <SignedOut>
-            <div className="rounded-xl border border-zinc-800 bg-zinc-950/70 p-6 text-center text-zinc-300">
-              Sign in to create playlists and access your saved collections.
-            </div>
-          </SignedOut>
+          <div>
+            <h1 className="text-3xl font-bold text-white">Your Playlists</h1>
+            <p className="text-zinc-400 text-sm mt-1">
+              {playlists?.length ?? 0} {playlists?.length === 1 ? "playlist" : "playlists"}
+            </p>
+          </div>
         </div>
+
+        <SignedIn>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between bg-zinc-950/70 rounded-xl p-4 border border-zinc-800">
+            <div className="flex-1 min-w-0">
+              <label className="text-sm text-zinc-400">Create new playlist</label>
+              <input
+                value={title}
+                onChange={(event) => setTitle(event.target.value)}
+                placeholder="Playlist name"
+                className="mt-2 w-full rounded-xl border border-zinc-800 bg-[#131313] px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#694bcc]"
+              />
+            </div>
+            <button
+              onClick={handleCreatePlaylist}
+              disabled={!title.trim() || creating}
+              className="inline-flex items-center justify-center sm:mt-6 gap-2 rounded-xl bg-[#694bcc] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#775ad4] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              <Plus className="w-4 h-4" />
+              Create playlist
+            </button>
+          </div>
+        </SignedIn>
+
+        <SignedOut>
+          <div className="rounded-xl border border-zinc-800 bg-zinc-950/70 p-6 text-center text-zinc-300">
+            Sign in to create playlists and access your saved collections.
+          </div>
+        </SignedOut>
+      </div>
 
         <ScrollArea className="flex-1 h-full min-h-0 overflow-hidden">
           {isLoading ? (

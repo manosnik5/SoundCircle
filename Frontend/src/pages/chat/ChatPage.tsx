@@ -12,10 +12,6 @@ const ChatPage = () => {
   const [isMobile, setIsMobile] = useState(false)
   const { currentSong } = usePlayer();
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
-
-  
-
-
   const { data: users, isLoading: usersLoading } = useUsers();
   const { data: messages } = useMessages(selectedUserId);
 
@@ -30,7 +26,9 @@ const ChatPage = () => {
         window.addEventListener("resize", handleMobile)
   
         return () => window.removeEventListener("resize", handleMobile)
-      }, [])
+      }, []
+  )
+
   return (
     <div
       className={`h-full rounded-lg bg-zinc-900 overflow-hidden flex flex-col ${
