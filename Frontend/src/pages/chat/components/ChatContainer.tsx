@@ -44,72 +44,79 @@ const ChatContainer = ({ selectedUser, messages, currentUser }: ChatContainerPro
 
   return (
     <>
-      <div className="p-4 border-b border-zinc-800">
-        <div className='flex items-center gap-3'>
-          <Avatar>
-            <AvatarImage src={selectedUser.imageUrl} />
-            <AvatarFallback>{selectedUser.fullName[0]}</AvatarFallback>
-          </Avatar>
-          <div>
-            <p className="font-semibold">{selectedUser.fullName}</p>
-            <p className="text-xs text-zinc-400">
-              {onlineUsers.has(selectedUser.clerkId) ? "Online" : "Offline"}
-            </p>
-          </div>
+     <div className="p-3 sm:p-4 border-b border-zinc-800">
+      <div className="flex items-center gap-2 sm:gap-3">
+        <Avatar className="size-8 sm:size-10">
+          <AvatarImage src={selectedUser.imageUrl} />
+          <AvatarFallback>{selectedUser.fullName[0]}</AvatarFallback>
+        </Avatar>
+        <div>
+          <p className="font-semibold text-sm sm:text-base">
+            {selectedUser.fullName}
+          </p>
+          <p className="text-[10px] sm:text-xs text-zinc-400">
+            {onlineUsers.has(selectedUser.clerkId) ? "Online" : "Offline"}
+          </p>
         </div>
       </div>
+    </div>
 
-      <ScrollArea className='h-[calc(100vh-340px)]' ref={scrollAreaRef}>
-        <div className='p-4 space-y-4'>
-          {messages?.length ? (
-            <>
-              {messages.map(msg => {
-                const own = msg.senderId === currentUser.id;
-                return (
+     <ScrollArea className="flex-1 min-h-0" ref={scrollAreaRef}>
+      <div className="p-3 sm:p-4 space-y-3 sm:space-y-4">
+        {messages?.length ? (
+          <>
+            {messages.map(msg => {
+              const own = msg.senderId === currentUser.id;
+              return (
+                <div
+                  key={msg._id}
+                  className={`flex items-start gap-2 sm:gap-3 ${
+                    own ? "justify-end" : "justify-start"
+                  }`}
+                >
+                  {!own && (
+                    <Avatar className="size-7 sm:size-8 shrink-0">
+                      <AvatarImage src={selectedUser.imageUrl} />
+                    </Avatar>
+                  )}
+
                   <div
-                    key={msg._id}
-                    className={`flex items-start gap-3 ${own ? "justify-end" : "justify-start"}`}
+                    className={`rounded-lg p-2 sm:p-3 
+                      max-w-[75%] sm:max-w-[40%] min-w-0
+                      ${own ? "bg-[#694bcc]" : "bg-zinc-800"}
+                    `}
                   >
-                    {!own && (
-                      <Avatar className='size-8 shrink-0'>
-                        <AvatarImage src={selectedUser.imageUrl} />
-                      </Avatar>
-                    )}
-                    
-                    <div
-                      className={`rounded-lg p-3 max-w-[40%] min-w-0
-                        ${own ? "bg-emerald-600" : "bg-zinc-800"}
-                      `}
-                    >
-                      <p className='text-sm break-anywhere'>{msg.content}</p>
-                      <span className='text-xs text-zinc-300 mt-1 block'>
-                        {formatTime(msg.createdAt)}
-                      </span>
-                    </div>
-
-                    {own && (
-                      <Avatar className='size-8 shrink-0'>
-                        <AvatarImage src={currentUser.imageUrl} />
-                      </Avatar>
-                    )}
+                    <p className="text-xs sm:text-sm break-anywhere">
+                      {msg.content}
+                    </p>
+                    <span className="text-[10px] sm:text-xs text-zinc-300 mt-1 block">
+                      {formatTime(msg.createdAt)}
+                    </span>
                   </div>
-                );
-              })}
-              <div ref={messageEndRef} />
-            </>
-          ) : (
-            <div className="flex items-center justify-center h-full text-zinc-400">
-              No messages yet
-            </div>
-          )}
-        </div>
-      </ScrollArea>
 
-      <MessageInput
-        selectedUser={selectedUser}
-        currentUserId={currentUser.id}
-      />
-    </>
+                  {own && (
+                    <Avatar className="size-7 sm:size-8 shrink-0">
+                      <AvatarImage src={currentUser.imageUrl} />
+                    </Avatar>
+                  )}
+                </div>
+              );
+            })}
+            <div ref={messageEndRef} />
+          </>
+        ) : (
+          <div className="flex items-center justify-center h-full text-zinc-400 text-sm">
+            No messages yet
+          </div>
+        )}
+      </div>
+    </ScrollArea>
+
+    <MessageInput
+      selectedUser={selectedUser}
+      currentUserId={currentUser.id}
+    />
+  </>
   );
 };
 

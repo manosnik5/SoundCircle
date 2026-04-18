@@ -7,7 +7,8 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useSocket } from "@/contexts/SocketContext";
 import TopBar from "@/components/TopBar";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import { usePlayer } from "@/contexts/MusicPlayerContext";
 import { Link } from "react-router-dom";
 
 const FriendsPage = () => {
@@ -15,6 +16,20 @@ const FriendsPage = () => {
   const navigate = useNavigate();
   const { data: users, isLoading: usersLoading } = useUsers();
   const { onlineUsers, userActivities } = useSocket();
+  const { currentSong } = usePlayer();
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -43,12 +58,20 @@ const FriendsPage = () => {
   }
 
   return (
-    <div className="h-full bg-zinc-900 flex flex-col">
+    <div
+      className={`h-full bg-zinc-900 flex flex-col ${
+        isMobile
+          ? currentSong
+            ? "pb-35"
+            : "pb-16"
+          : "pb-0"
+      }`}
+    >
       <TopBar />
       
       <div className="p-4 border-b border-zinc-800 bg-zinc-800/50">
         <div className='flex items-center gap-3'>
-          <div className="bg-linear-to-br from-emerald-500 to-emerald-700 p-2 rounded-lg">
+          <div className="bg-linear-to-br from-[#8b5cf6] to-[#694bcc] p-2 rounded-lg">
             <Users className='w-6 h-6 text-white' />
           </div>
           <div>

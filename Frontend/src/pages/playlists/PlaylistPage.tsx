@@ -1,10 +1,11 @@
-﻿import { useState } from "react";
+﻿import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { SignedIn, SignedOut, useAuth } from "@clerk/clerk-react";
 import { useCreatePlaylist, useDeletePlaylist, usePlaylists } from "@/hooks/useMusic";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Library, Music, Plus, Trash2 } from "lucide-react";
 import PlaylistSkeleton from "@/components/skeletons/PlaylistSkeleton";
+import { usePlayer } from "@/contexts/MusicPlayerContext";
 import TopBar from "@/components/TopBar";
 
 const PlaylistPage = () => {
@@ -14,6 +15,20 @@ const PlaylistPage = () => {
   const deletePlaylist = useDeletePlaylist();
   const [title, setTitle] = useState("");
   const [creating, setCreating] = useState(false);
+  const { currentSong } = usePlayer();
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    handleMobile();
+    window.addEventListener("resize", handleMobile);
+
+    return () => window.removeEventListener("resize", handleMobile);
+  }, []);
 
   const handleCreatePlaylist = () => {
     if (!title.trim()) return;
@@ -33,13 +48,21 @@ const PlaylistPage = () => {
   };
 
   return (
-    <div className="h-full rounded-lg bg-zinc-900 overflow-hidden flex flex-col">
+    <div
+      className={`h-full rounded-lg bg-zinc-900 overflow-hidden flex flex-col ${
+        isMobile
+          ? currentSong
+            ? "pb-35"
+            : "pb-16"
+          : "pb-0"
+      }`}
+    >
       <TopBar />
 
       <div className="flex-1 min-h-0 p-6 flex flex-col">
         <div className="flex flex-col gap-6 mb-6">
           <div className="flex items-center gap-3">
-            <div className="bg-linear-to-br from-emerald-500 to-emerald-700 p-3 rounded-lg">
+            <div className="bg-linear-to-br from-[#8b5cf6] to-[#694bcc] p-3 rounded-lg">
               <Library className="w-6 h-6 text-white" />
             </div>
             <div>
@@ -58,13 +81,13 @@ const PlaylistPage = () => {
                   value={title}
                   onChange={(event) => setTitle(event.target.value)}
                   placeholder="Playlist name"
-                  className="mt-2 w-full rounded-xl border border-zinc-800 bg-[#131313] px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="mt-2 w-full rounded-xl border border-zinc-800 bg-[#131313] px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#694bcc]"
                 />
               </div>
               <button
                 onClick={handleCreatePlaylist}
                 disabled={!title.trim() || creating}
-                className="inline-flex items-center justify-center sm:mt-6 gap-2 rounded-xl bg-emerald-500 px-4 py-3 text-sm font-semibold text-black transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center justify-center sm:mt-6 gap-2 rounded-xl bg-[#694bcc] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#775ad4] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <Plus className="w-4 h-4" />
                 Create playlist
@@ -117,7 +140,7 @@ const PlaylistPage = () => {
                         />
                       </div>
                     ) : (
-                      <div className="flex h-48 w-full items-center justify-center bg-zinc-900 text-emerald-400">
+                      <div className="flex h-48 w-full items-center justify-center bg-zinc-900 text-[#694bcc]">
                         <Library className="h-10 w-10" />
                       </div>
                     )}

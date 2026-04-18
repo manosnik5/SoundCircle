@@ -4,18 +4,30 @@ import { Disc, Music, Search } from "lucide-react"
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import PlayButton from "../home/components/PlayButton";
+import { usePlayer } from "@/contexts/MusicPlayerContext";
 
 const SearchPage = () => {
   const [inputValue, setInputValue] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const searchRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const { currentSong } = usePlayer();
+  const [isMobile, setIsMobile] = useState(false);
   
   const { data: searchSongs, isLoading: isLoadingSongs } = useSearchSongs(debouncedQuery);
   const { data: searchAlbums, isLoading: isLoadingAlbums } = useSearchAlbums(debouncedQuery);
 
   const hasResults = (searchSongs && searchSongs.length > 0) || (searchAlbums && searchAlbums.length > 0);
   const isLoading = isLoadingSongs || isLoadingAlbums;
+
+  useEffect(() => {
+    const handleMobile = () => setIsMobile(window.innerWidth < 768);
+
+    handleMobile();
+    window.addEventListener("resize", handleMobile);
+
+    return () => window.removeEventListener("resize", handleMobile);
+  }, []);
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -42,7 +54,15 @@ const SearchPage = () => {
   };
 
   return (
-    <div className='h-full bg-zinc-900 flex flex-col'>
+   <div
+      className={`h-full bg-zinc-900 flex flex-col min-h-0 ${
+        isMobile
+          ? currentSong
+            ? "pb-35"
+            : "pb-16"
+          : "pb-0"
+      }`}
+    >
       <div className='p-4 bg-zinc-800/50 border-b border-zinc-800'>
         <div className='relative' ref={searchRef}>
           <div className="flex items-center">
@@ -60,7 +80,7 @@ const SearchPage = () => {
         </div>
       </div>
 
-      <ScrollArea className='flex-1'>
+      <ScrollArea className='flex-1 min-h-0'>
         <div className='p-4'>
           {!inputValue ? (
             <div className="flex flex-col items-center justify-center h-[60vh] text-center px-4">
@@ -77,7 +97,7 @@ const SearchPage = () => {
               {searchAlbums && searchAlbums.length > 0 && (
                 <div>
                   <div className="flex items-center gap-2 mb-3 px-2">
-                    <Disc className="w-5 h-5 text-emerald-500" />
+                    <Disc className="w-5 h-5 text-[#694bcc]" />
                     <h3 className="text-lg font-semibold text-white">Albums</h3>
                   </div>
                   <div className="space-y-2">
@@ -107,7 +127,7 @@ const SearchPage = () => {
               {searchSongs && searchSongs.length > 0 && (
                 <div>
                   <div className="flex items-center gap-2 mb-3 px-2">
-                    <Music className="w-5 h-5 text-emerald-500" />
+                    <Music className="w-5 h-5 text-[#694bcc]" />
                     <h3 className="text-lg font-semibold text-white">Songs</h3>
                   </div>
                   <div className="space-y-2">
