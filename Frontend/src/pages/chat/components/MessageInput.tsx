@@ -24,27 +24,27 @@ const MessageInput = ({ selectedUser, currentUserId }: MessageInputProps) => {
   };
 
   return (
-    <div className="p-4 mt-4 border-t border-zinc-800">
-      <div className="flex gap-2">
-        <Input
-          value={messageInput}
-          onChange={e => setMessageInput(e.target.value)}
-          placeholder="Type a message..."
-          onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-          className="bg-zinc-800 border-none"
-          maxLength={MAX_MESSAGE_LENGTH}
-        />
-        <Button
-          type="submit"
-          size="icon"
-          onClick={handleSendMessage}
-          disabled={!messageInput.trim() || !isConnected}
-          className="bg-emerald-600 hover:bg-emerald-700 cursor-pointer"
-        >
-          <Send className="w-4 h-4" />
-        </Button>
-      </div>
-    </div>
+    <div className="p-3 sm:p-4 mt-3 sm:mt-4 border-t border-zinc-800">
+  <div className="flex gap-2">
+    <Input
+      value={messageInput}
+      onChange={e => setMessageInput(e.target.value)}
+      placeholder="Type a message..."
+      onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+      className="bg-zinc-800 border-none text-sm sm:text-base h-9 sm:h-10"
+      maxLength={MAX_MESSAGE_LENGTH}
+    />
+    <Button
+      type="submit"
+      size="icon"
+      onClick={handleSendMessage}
+      disabled={!messageInput.trim() || !isConnected}
+      className="bg-[#694bcc] hover:bg-[#563ea5] cursor-pointer h-9 w-9 sm:h-10 sm:w-10"
+    >
+      <Send className="w-4 h-4 sm:w-5 sm:h-5" />
+    </Button>
+  </div>
+</div>
   );
 };
 
