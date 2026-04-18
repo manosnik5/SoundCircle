@@ -9,10 +9,8 @@ import {
 import PlayBackControls from "./components/PlayBackControls"
 import AudioPlayer from "./components/AudioPlayer"
 import BottomBarMenu from "./components/BottomBarMenu"
-import MobileMiniPlayer from "./components/MobileMiniPlayer"
 import MobilePlayBackPanel from "./components/MobilePlayBackPanel"
 import { useEffect, useState } from "react"
-
 
 const MainLayout = () => {
     const navigate = useNavigate();
@@ -67,10 +65,7 @@ const MainLayout = () => {
       </ResizablePanelGroup>
       {isMobile ? (
         <>
-          <div className="flex justify-center">
-            <MobileMiniPlayer onOpen={() => setMobilePanelOpen(true)} />
-          </div>
-          <BottomBarMenu />
+          <BottomBarMenu onOpen={() => setMobilePanelOpen(true)} />
         </>
       ) : (
         <PlayBackControls />
