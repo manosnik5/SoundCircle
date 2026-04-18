@@ -57,12 +57,8 @@ export const MusicPlayerProvider = ({children}: {children: ReactNode}) => {
     }, [socket, userId]);
 
     const initializeQueue = useCallback((songs: Song[]) => {
-        setQueue(songs);
-        if (currentIndex === -1) {
-            setCurrentSongState((prev) => prev ?? songs[0]);
-            setCurrentIndex(0);
-        }
-    }, [currentIndex])
+    setQueue(songs);
+    }, []);
 
     const playAlbum = useCallback((songs: Song[], startIndex = 0) => {
         if (songs.length === 0) return;
