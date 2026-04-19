@@ -208,7 +208,7 @@ const PlaylistDetailPage = () => {
             <div className="px-4 sm:px-6 pb-4 flex items-center justify-center sm:justify-start gap-6">
               <Button
                 size="icon"
-                className="w-14 h-14 rounded-full bg-emerald-500 hover:bg-emerald-400 cursor-pointer hover:scale-105 transition-all"
+                className="w-14 h-14 rounded-full bg-linear-to-br from-[#8b5cf6] to-[#694bcc] cursor-pointer hover:scale-105 transition-all"
                 onClick={handlePlayPlaylist}
               >
                 {isPlaying && playlist?.songs.some((song) => song._id === currentSong?._id) ? (
