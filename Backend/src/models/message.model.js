@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { encrypt, decrypt } from "../utils/encryption.js";
 
 const messageSchema = new mongoose.Schema({
     senderId: {
@@ -14,5 +15,7 @@ const messageSchema = new mongoose.Schema({
         required: true,
     }
 }, { timestamps: true })
+
+
 
 export const Message = mongoose.model("Message", messageSchema);

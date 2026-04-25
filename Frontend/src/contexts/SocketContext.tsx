@@ -74,24 +74,25 @@ export const SocketProvider = ({children}: { children: ReactNode }) => {
             });
         });
 
-        socket.on("receive_message", (message: Message) => {
-            console.log("Message received:", message);
-            
-            queryClient.setQueryData<Message[]>(
-                chatKeys.messages(message.senderId),
-                (oldMessages = []) => [...oldMessages, message]
-            );
-        });
+        // SocketContext.tsx
 
-        socket.on("message_sent", (message: Message) => {
-            console.log("Message sent confirmation:", message);
-            
-            queryClient.setQueryData<Message[]>(
-                chatKeys.messages(message.receiverId),
-                (oldMessages = []) => [...oldMessages, message]
-            );
-        });
+// SocketContext.tsx
 
+socket.on("receive_message", (message: Message) => {
+    // Other person is the sender → use senderId as the key
+    queryClient.setQueryData<Message[]>(
+        chatKeys.messages(message.senderId),
+        (oldMessages = []) => [...oldMessages, message]
+    );
+});
+
+socket.on("message_sent", (message: Message) => {
+    // Other person is the receiver → use receiverId as the key
+    queryClient.setQueryData<Message[]>(
+        chatKeys.messages(message.receiverId),
+        (oldMessages = []) => [...oldMessages, message]
+    );
+});
         socket.on("message_error", (error: string) => {
             console.error("Message error:", error);
         });

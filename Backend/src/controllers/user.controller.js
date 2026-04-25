@@ -1,5 +1,6 @@
 import { User } from "../models/user.model.js";
 import { Message } from "../models/message.model.js"
+import { decrypt } from "../utils/encryption.js";
 
 export const getAllFriends = async (req, res, next) => {
     try {
@@ -45,22 +46,31 @@ export const searchUsers = async (req, res, next) => {
     }
 };
 
-export const getMessages = async (req, res, next) => {
-    try {
-        const myId = req.auth.userId;
-        const {userId} = req.params;
-        
-        
-        const messages = await Message.find({
-            $or: [
-                {senderId: userId, receiverId: myId},
-                {senderId: myId, receiverId: userId}
-            ]
-        }).sort({createdAt: 1})
-        res.status(200).json(messages)
-    }catch (error) {
-        next(error);
-    }
-}
 
+export const getMessages = async (req, res, next) => {
+  try {
+    const myId = req.auth.userId;
+    const { userId } = req.params;
+
+    const messages = await Message.find({
+      $or: [
+        { senderId: userId, receiverId: myId },
+        { senderId: myId, receiverId: userId },
+      ],
+    }).sort({ createdAt: 1 });
+
+    const decrypted = messages.map(msg => ({
+      _id: msg._id,
+      senderId: msg.senderId,
+      receiverId: msg.receiverId,
+      content: decrypt(msg.content),
+      createdAt: msg.createdAt,
+      updatedAt: msg.updatedAt,
+    }));
+
+    res.status(200).json(decrypted);
+  } catch (error) {
+    next(error);
+  }
+};
 
